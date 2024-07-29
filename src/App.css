@@ -97,3 +97,13 @@
     color: black;
     text-decoration: none;
 }
+
+.error {
+    width: 80%;
+    border-radius: 5px;
+    border: 2px solid red;
+    margin-bottom: 13px;
+    text-align: center;
+    background-color: rgb(241, 88, 118);
+    color: white;
+}
