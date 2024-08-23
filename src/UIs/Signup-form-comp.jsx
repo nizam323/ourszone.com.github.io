@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Form_inp from "../components/Form-input";
 import ErrorFillInput from "../components/Error-fill-input";
+import { regUsers } from "../components/Data";
+import UserProfile from "./User_profile";
+import { UserContext } from "../App";
 
 function Signup_form() {
-    
+
     const [users, setUsers] = useState([]);
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
@@ -16,13 +19,17 @@ function Signup_form() {
     function dataPush() {
         if (!check) {
             if (userName && userEmail && userPassword) {
-                setUsers([...users, {
+                const newUser = {
                     username: userName,
                     useremail: userEmail,
                     userpassword: userPassword,
-                }]);
+                };
+                setUsers((prevUsers) => {
+                    const updatedUsers = [...prevUsers, newUser];
+                    return updatedUsers;
+                });
                 window.alert("signup sucessfull");
-                console.log(...users);
+                regUsers.push(newUser)
                 setUserPassword("");
                 setUserEmail("");
                 setUserName("");
@@ -72,53 +79,87 @@ function Signup_form() {
 export { Signup_form };
 
 function Signin_form() {
+
+    const { loginpageDisplay, setLoginpageDisplay } = useContext(UserContext);
+
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
     const [fillInpEmail, setFillInpsEmail] = useState(false);
     const [fillInpPassword, setFillInpPassword] = useState(false);
 
-    // const check = users;
+    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [signedInUser, setSignedInUser] = useState("");
+
+    const check = regUsers.find(items => userEmail === items.useremail && userPassword === items.userpassword);
     function dataPush() {
-        if (userEmail && userPassword) {
-            window.alert("signin sucessfull");
-            setUserPassword("");
-            setUserEmail("");
-            setFillInpsEmail(false);
-            setFillInpPassword(false);
-            console.log(userEmail);
-            console.log(userPassword);
-        } else if (!userEmail || !userPassword) {
+        if (check) {
+            if (userEmail && userPassword) {
+                window.alert("signin sucessfull");
 
-            if (!userEmail) { setFillInpsEmail(true) }
-            else { setFillInpsEmail(false) };
+                setLoginpageDisplay(false)
+                setIsSignedIn(true);
+                setSignedInUser(check);
 
-            if (!userPassword) { setFillInpPassword(true) }
-            else { setFillInpPassword(false) };
+                setUserPassword("");
+                setUserEmail("");
+                setFillInpsEmail(false);
+                setFillInpPassword(false);
+                console.log(userEmail);
+                console.log(userPassword);
+            }
+        }
+        else {
+            if (!userEmail || !userPassword) {
+
+                if (!userEmail) { setFillInpsEmail(true) }
+                else { setFillInpsEmail(false) };
+
+                if (!userPassword) { setFillInpPassword(true) }
+                else { setFillInpPassword(false) };
+            }
+            else { alert("Invalid Email Or Password") }
         }
     }
 
+    // if (!loginpageDisplay) {
+    // return (
+    // <>
+    //     {isSignedIn && signedInUser && (
+    //         < UserProfile
+    //             userName={signedInUser.username}
+    //             userEmail={signedInUser.useremail}
+    //         />)
+    //     }
+    // // </>
+    // )
+    // }
+
     return (
         <>
-            <div className="form-con">
-                <h2 className="sign-h2">SignIn</h2>
-                <br />
-                <br />
-                <div className="inp-con">
-                    <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
-                    {fillInpEmail &&
-                        <ErrorFillInput />
-                    }
+            {isSignedIn && signedInUser ?
+                < UserProfile
+                    userName={signedInUser.username}
+                    userEmail={signedInUser.useremail}
+                /> : <div className="form-con">
+                    <h2 className="sign-h2">SignIn</h2>
                     <br />
-                    <Form_inp onChange={(e) => { setUserPassword(e.target.value) }} value={userPassword} type="password" placeholder="Password" />
-                    {fillInpPassword &&
-                        <ErrorFillInput />
-                    }
                     <br />
-                    <a className="forgot-pass-a" href="">Forgot Password?</a>
-                    <br />
-                    <button className="signin-btn" onClick={dataPush}>SignIn</button>
-                </div>
-            </div>
+                    <div className="inp-con">
+                        <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
+                        {fillInpEmail &&
+                            <ErrorFillInput />
+                        }
+                        <br />
+                        <Form_inp onChange={(e) => { setUserPassword(e.target.value) }} value={userPassword} type="password" placeholder="Password" />
+                        {fillInpPassword &&
+                            <ErrorFillInput />
+                        }
+                        <br />
+                        <a className="forgot-pass-a" href="">Forgot Password?</a>
+                        <br />
+                        <button className="signin-btn" onClick={dataPush}>SignIn</button>
+                    </div>
+                </div>}
         </>
     )
 };

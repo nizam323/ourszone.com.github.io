@@ -107,3 +107,7 @@
     background-color: rgb(241, 88, 118);
     color: white;
 }
+
+.about-edit{
+    cursor: pointer;
+}
