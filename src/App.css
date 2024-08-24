@@ -108,6 +108,20 @@
     color: white;
 }
 
-.about-edit{
+.about-edit {
     cursor: pointer;
+}
+
+#signOutBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: rgb(255, 63, 63);
+    color: #fff;
+}
+
+#signOutBtn:hover {
+    transition: background-color .4s ease-in-out;
+    background-color: red;
+    border-color: #212529;
 }

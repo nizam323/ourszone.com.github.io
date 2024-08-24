@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Btn_sm from "../components/Btn-sm";
-// import { Signin_form } from "./Signin-form-comp.jsx";
-import { Signup_form, Signin_form } from "./Signup-form-comp.jsx";
+import { Signin_form } from "./Signin-form-comp.jsx";
+import { Signup_form } from "./Signup-form-comp.jsx";
 
 function Loginpage() {
   const [isSignInVisible, setIsSignInVisible] = useState(true);

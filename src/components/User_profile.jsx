@@ -1,12 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import Btn_sm from "../components/Btn-sm";
+import { UserContext } from "../App";
 
 function UserProfile({ userName, userEmail }) {
+
+    let date = new Date();
+    const { setLoginpageDisplay, setIsSignedIn } = useContext(UserContext);
 
     const [city, setCity] = useState("")
     const [status, setStatus] = useState("")
     const [profession, setProfession] = useState("")
-    const [proSrc, setProSrc] = useState("")
+    const [proSrc, setProSrc] = useState("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp")
     const [name, setName] = useState("")
+    const [posts, setPosts] = useState([]);
+    const [postTxt, setPostTxt] = useState([]);
+    const [postUrl, setPostUrl] = useState([]);
+
+    function createPost() {
+        let postTxt = prompt("Enter Title");
+        setPostTxt(postTxt);
+        let postUrl = prompt("Enter Your Image Source");
+        setPostUrl(postUrl);
+        if (postTxt && postUrl) {
+            setPosts([...posts, { text: postTxt, url: postUrl }]);
+        }
+    }
+
+    function signOut() {
+        if (window.confirm("Are you sure you want to Sign Out?")) {
+            setIsSignedIn(false);
+            setLoginpageDisplay(true);
+        }
+    }
 
     function edit_name() {
         let name = prompt("Enter Your Name");
@@ -44,14 +69,14 @@ function UserProfile({ userName, userEmail }) {
                                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
                                         <img
-                                            src={proSrc || "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"}
+                                            src={proSrc ? proSrc : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"}
                                             alt="Your Profile Photo"
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: '150px', height: '100%', zIndex: 1 }}
                                         />
                                         <button
                                             type="button"
-                                            className="btn btn-outline-dark text-body"
+                                            className="btn btn-outline-dark"
                                             style={{ zIndex: 1 }}
                                             onClick={curd}
                                         >
@@ -60,7 +85,6 @@ function UserProfile({ userName, userEmail }) {
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
                                         <h5 className="about-edit" onClick={edit_name}>{name.trim() !== "" ? name : userName}</h5>
-                                        <p>{userEmail}</p>
                                     </div>
                                 </div>
                                 <div className="p-4 text-black bg-body-tertiary">
@@ -78,16 +102,21 @@ function UserProfile({ userName, userEmail }) {
                                             <p className="small text-muted mb-0">Following</p>
                                         </div> */}
                                     </div>
+                                    <Btn_sm onClick={signOut} id="signOutBtn" btn_txt="SignOut" />
                                 </div>
                                 <div className="card-body p-4 text-black">
-                                    <div className="mb-5 text-body">
+                                    <div className="mb-4 text-body">
                                         <p className="lead fw-normal mb-1">About</p>
                                         <div className="p-4 bg-body-tertiary">
                                             <p className="font-italic mb-1 about-edit" onClick={edit_about1}>{profession || 'Your Profession'}</p>
                                             <p className="font-italic mb-1 about-edit" onClick={edit_about2}>{`Lives in ${city}` || "Your City"}</p>
-                                            <p className="font-italic mb-0 about-edit" onClick={edit_about3}>{status || "Your Status"}</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about3}>{status || "Your Status"}</p>
+                                            <p>Your Email {userEmail}</p>
                                         </div>
                                     </div>
+                                    {/* 
+                                    <div className="d-flex justify-content-between align-items-center mb-4 text-body"><h3 className="btn btn-outline-dark"><span>Create Post</span></h3></div> */}
+
                                     <div className="d-flex justify-content-between align-items-center mb-4 text-body">
                                         <p className="lead fw-normal mb-0">Recent photos</p>
                                     </div>
@@ -122,6 +151,38 @@ function UserProfile({ userName, userEmail }) {
                                                 className="w-100 rounded-3"
                                             />
                                         </div>
+                                    </div>
+
+
+                                    <div onClick={createPost} className="d-flex justify-content-center align-items-center mb-4 text-body mt-5"><h3 className="btn btn-outline-dark"><span>Create Post</span></h3></div>
+
+                                    <p className="lead fw-normal mb-0">Posts</p>
+
+                                    <div className="posts">
+
+                                        {posts.length <= 0 ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> :
+                                            posts.map((post, index) => (
+                                                <>
+                                                    <div key={index} className="mt-5 card" style={{ width: "100%" }}>
+                                                        <img key={index} alt="..." src={proSrc ? proSrc : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
+                                                            width: "50px",
+                                                            height: "50px",
+                                                            borderRadius: "50%",
+                                                            border: "1px solid",
+                                                            margin: "10px 0 0 10px"
+                                                        }} />
+                                                        <span>
+                                                            {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
+                                                                { "" }
+                                                                {date.getHours()<=9 ? date.getHours()+"0":date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()}
+                                                        </span>
+                                                        <div className="card-body">
+                                                            <p className="card-text">{post.text}</p>
+                                                        </div>
+                                                        <img src={post.url} className="card-img-top" alt={`Post ${index}`} />
+                                                    </div>
+                                                </>
+                                            ))}
                                     </div>
                                 </div>
                             </div>
