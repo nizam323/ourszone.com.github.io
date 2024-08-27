@@ -162,7 +162,7 @@ function UserProfile({ userName, userEmail }) {
 
                                         {posts.length <= 0 ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> :
                                             posts.map((post, index) => (
-                                                <>
+                                                // <>
                                                     <div key={index} className="mt-5 card" style={{ width: "100%" }}>
                                                         <img key={index} alt="..." src={proSrc ? proSrc : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
                                                             width: "50px",
@@ -181,7 +181,7 @@ function UserProfile({ userName, userEmail }) {
                                                         </div>
                                                         <img src={post.url} className="card-img-top" alt={`Post ${index}`} />
                                                     </div>
-                                                </>
+                                                // </>
                                             ))}
                                     </div>
                                 </div>

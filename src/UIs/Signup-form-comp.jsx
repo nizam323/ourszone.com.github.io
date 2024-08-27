@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Form_inp from "../components/Form-input";
 import ErrorFillInput from "../components/Error-fill-input";
 import { regUsers } from "../components/Data";
+import { NavLink } from "react-router-dom";
+import Btn_sm from "../components/Btn-sm";
 
 function Signup_form() {
 
@@ -48,30 +50,65 @@ function Signup_form() {
     }
 
     return (
-        <div className="form-con">
-            <h2 className="sign-h2">SignUp</h2>
-            <br />
-            <br />
-            <div className="inp-con">
-                <Form_inp value={userName} onChange={(e) => { setUserName(e.target.value) }} type="text" placeholder="Username" />
-                {fillInpName &&
-                    <ErrorFillInput />
-                }
-                <br />
-                <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
-                {fillInpEmail &&
-                    <ErrorFillInput />
-                }
-                <br />
-                <Form_inp onChange={(e) => { setUserPassword(e.target.value) }} value={userPassword} type="password" placeholder="Password" />
-                {fillInpPassword &&
-                    <ErrorFillInput />
-                }
-                <br />
-                <button className="signin-btn" onClick={dataPush}>SignUp</button>
+
+        <>
+
+            <div className="parent">
+                <div className="login-page-con">
+                    <div className="btn-sm-con">
+
+                        <NavLink to={"/"} >
+                            <Btn_sm
+                                // bg_color={isSignInVisible ? "#e75348" : "rgb(222, 215, 215)"}
+                                // color={isSignInVisible ? "white" : "black"}
+                                btn_txt="SignIn"
+                                id="signin-btn"
+                            // onClick={handleSigninClick}
+                            /></NavLink>
+
+                        <NavLink to={"/signup"} className={({ isActive }) => isActive ? "activeBtn btn-sm" : ''} >
+                            SignUp
+                            {/* <Btn_sm */}
+                            {/* // bg_color={!isSignInVisible ? "#e75348" : "rgb(222, 215, 215)"} */}
+                            {/* // color={!isSignInVisible ? "white" : "black"} */}
+                            {/* btn_txt="SignUp" */}
+                            {/* id="signup-btn" */}
+                            {/* // onClick={handleSignupClick} */}
+                            {/* /> */}
+                        </NavLink>
+
+
+
+                    </div>
+
+                    <div className="form-con">
+                        <h2 className="sign-h2">SignUp</h2>
+                        <br />
+                        <br />
+                        <div className="inp-con">
+                            <Form_inp value={userName} onChange={(e) => { setUserName(e.target.value) }} type="text" placeholder="Username" />
+                            {fillInpName &&
+                                <ErrorFillInput />
+                            }
+                            <br />
+                            <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
+                            {fillInpEmail &&
+                                <ErrorFillInput />
+                            }
+                            <br />
+                            <Form_inp onChange={(e) => { setUserPassword(e.target.value) }} value={userPassword} type="password" placeholder="Password" />
+                            {fillInpPassword &&
+                                <ErrorFillInput />
+                            }
+                            <br />
+                            <button className="signin-btn" onClick={dataPush}>SignUp</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    )
+
+
+        </>)
 };
 
 export { Signup_form };

@@ -125,3 +125,30 @@
     background-color: red;
     border-color: #212529;
 }
+
+#error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .activeBtn{
+    color: white;
+    background-color: #e75348;
+    padding: 5px 15px;
+    border: none;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+    text-decoration: none;
+  }
+
+  .activeBtn:hover{
+    color: white;
+  }
