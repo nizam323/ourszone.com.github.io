@@ -4,7 +4,7 @@ import ErrorFillInput from "../components/Error-fill-input";
 import { UserContext } from "../App";
 import UserProfile from "../components/User_profile";
 import { regUsers } from "../components/Data";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Btn_sm from "../components/Btn-sm";
 
 function Signin_form() {
@@ -18,6 +18,7 @@ function Signin_form() {
     const [userPassword, setUserPassword] = useState("");
     const [fillInpEmail, setFillInpsEmail] = useState(false);
     const [fillInpPassword, setFillInpPassword] = useState(false);
+    const navigate = useNavigate();
 
     // const [isSignedIn, setIsSignedIn] = useState(false);
     // const [signedInUser, setSignedInUser] = useState("");
@@ -36,6 +37,11 @@ function Signin_form() {
                 setUserEmail("");
                 setFillInpsEmail(false);
                 setFillInpPassword(false);
+
+                // e.preventDefault();
+                navigate("home/user");
+                // window.location.assign("/user");
+                
             }
         }
         else {

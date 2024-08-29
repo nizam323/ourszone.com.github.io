@@ -133,9 +133,9 @@
     justify-content: center;
     width: 100%;
     height: 100vh;
-  }
+}
 
-  .activeBtn{
+.activeBtn {
     color: white;
     background-color: #e75348;
     padding: 5px 15px;
@@ -147,8 +147,35 @@
     cursor: pointer;
     margin-left: 5px;
     text-decoration: none;
-  }
+}
 
-  .activeBtn:hover{
+.activeBtn:hover {
     color: white;
-  }
+}
+
+.not-user {
+    font-size: 22px;
+    font-weight: 800;
+    font-style: oblique;
+    background-color: var(--themeColor);
+    color: wheat;
+}
+
+.not-user-span {
+    border: 5px solid rosybrown;
+    border-radius: 50%;
+    padding: 7%;
+    text-align: center;
+}
+
+.spotlight {
+    background-color: var(--themeColor);
+}
+
+@media only screen and (min-width:0px) and (max-width:992px) {
+    .navbar-nav .nav-link {
+        border-radius: 5px;
+        padding: 10px 10px;
+        margin: 10px 0 0;
+    }
+}

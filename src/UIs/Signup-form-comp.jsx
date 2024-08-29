@@ -15,7 +15,7 @@ function Signup_form() {
     const [fillInpEmail, setFillInpsEmail] = useState(false);
     const [fillInpPassword, setFillInpPassword] = useState(false);
 
-    const check = users.find(items => userEmail === items.useremail);
+    const check = regUsers.find(items => userEmail === items.useremail);
     function dataPush() {
         if (!check) {
             if (userName && userEmail && userPassword) {
@@ -28,6 +28,7 @@ function Signup_form() {
                     const updatedUsers = [...prevUsers, newUser];
                     return updatedUsers;
                 });
+                
                 window.alert("signup sucessfull");
                 regUsers.push(newUser)
                 setUserPassword("");

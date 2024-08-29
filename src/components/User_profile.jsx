@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import Btn_sm from "../components/Btn-sm";
 import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 function UserProfile({ userName, userEmail }) {
 
@@ -11,10 +12,11 @@ function UserProfile({ userName, userEmail }) {
     const [status, setStatus] = useState("")
     const [profession, setProfession] = useState("")
     const [proSrc, setProSrc] = useState("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp")
-    const [name, setName] = useState("")
+    const [name, setName] = useState(userName)
     const [posts, setPosts] = useState([]);
     const [postTxt, setPostTxt] = useState([]);
     const [postUrl, setPostUrl] = useState([]);
+    const navigate = useNavigate();
 
     function createPost() {
         let postTxt = prompt("Enter Title");
@@ -22,7 +24,13 @@ function UserProfile({ userName, userEmail }) {
         let postUrl = prompt("Enter Your Image Source");
         setPostUrl(postUrl);
         if (postTxt && postUrl) {
-            setPosts([...posts, { text: postTxt, url: postUrl }]);
+            setPosts([...posts, {
+                text: postTxt,
+                url: postUrl,
+                hr: date.getHours(),
+                min: date.getMinutes(),
+                sec: date.getSeconds(),
+            }]);
         }
     }
 
@@ -30,6 +38,7 @@ function UserProfile({ userName, userEmail }) {
         if (window.confirm("Are you sure you want to Sign Out?")) {
             setIsSignedIn(false);
             setLoginpageDisplay(true);
+            navigate("/");
         }
     }
 
@@ -62,9 +71,9 @@ function UserProfile({ userName, userEmail }) {
     return (
         <>
             <section className="h-100 gradient-custom-2">
-                <div className="container py-5 h-100">
+                <div className="container py-3 h-100" style={{backgroundColor:'#000000'}}>
                     <div className="row d-flex justify-content-center">
-                        <div className="col col-lg-9 col-xl-8">
+                        <div className="col col-lg-9 col-xl-8" style={{width:'100%',}}>
                             <div className="card">
                                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
@@ -84,7 +93,7 @@ function UserProfile({ userName, userEmail }) {
                                         </button>
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
-                                        <h5 className="about-edit" onClick={edit_name}>{name.trim() !== "" ? name : userName}</h5>
+                                        <h5 className="about-edit" onClick={edit_name}>{name && name.trim() !== "" ? name : userName}</h5>
                                     </div>
                                 </div>
                                 <div className="p-4 text-black bg-body-tertiary">
@@ -162,28 +171,42 @@ function UserProfile({ userName, userEmail }) {
 
                                         {posts.length <= 0 ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> :
                                             posts.map((post, index) => (
-                                                // <>
-                                                    <div key={index} className="mt-5 card" style={{ width: "100%" }}>
-                                                        <img key={index} alt="..." src={proSrc ? proSrc : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
+                                                <div key={index} className="mt-5 card" style={{ width: "100%" }}>
+                                                    <span className="d-flex">
+                                                        <img key={index} alt="..." src={"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
                                                             width: "50px",
                                                             height: "50px",
                                                             borderRadius: "50%",
                                                             border: "1px solid",
-                                                            margin: "10px 0 0 10px"
+                                                            margin: "10px 15px 0 10px"
                                                         }} />
-                                                        <span>
-                                                            {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
-                                                                { "" }
-                                                                {date.getHours()<=9 ? date.getHours()+"0":date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()}
-                                                        </span>
-                                                        <div className="card-body">
-                                                            <p className="card-text">{post.text}</p>
+                                                        <div className="d-flex flex-column" style={{ marginTop: '10px' }}>
+                                                            <h4>{name || userName}</h4>
+                                                            <pre>
+                                                                {
+                                                                    date.getDate()
+                                                                    + "/" +
+                                                                    date.getMonth()
+                                                                    + "/" +
+                                                                    date.getFullYear()}
+                                                                {"  "}
+                                                                {
+                                                                    (post.hr <= 9 ? "0" + post.hr : post.hr)
+                                                                    + ':' +
+                                                                    (post.min <= 9 ? "0" + post.min : post.min)
+                                                                    + ':' +
+                                                                    (post.sec <= 9 ? "0" + post.sec : post.sec)
+                                                                }                                                            </pre>
                                                         </div>
-                                                        <img src={post.url} className="card-img-top" alt={`Post ${index}`} />
+                                                    </span>
+                                                    <div className="card-body">
+                                                        <p className="card-text">{post.text}</p>
                                                     </div>
-                                                // </>
+                                                    <img src={post.url} className="card-img-top" alt={`Post ${index}`} />
+                                                </div>
                                             ))}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
