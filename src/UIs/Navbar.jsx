@@ -14,12 +14,12 @@ function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <NavLink to={"/home"} end className={({ isActive }) => isActive ? 'spotlight nav-link active' : 'nav-link active'}>
+                                <NavLink to={"/home"} end className={({ isActive }) => isActive ? 'spotlight nav-link active' : 'nav-link'}>
                                     Home
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to={"user"} end className={({ isActive }) => isActive ? 'spotlight nav-link active' : 'nav-link active'}>
+                                <NavLink to={"user"} end className={({ isActive }) => isActive ? 'spotlight nav-link active' : 'nav-link'}>
                                     Profile
                                 </NavLink>
                             </li>

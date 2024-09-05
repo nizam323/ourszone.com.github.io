@@ -38,9 +38,7 @@ function Signin_form() {
                 setFillInpsEmail(false);
                 setFillInpPassword(false);
 
-                // e.preventDefault();
-                navigate("home/user");
-                // window.location.assign("/user");
+                navigate("home/user"); 
                 
             }
         }

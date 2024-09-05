@@ -94,18 +94,6 @@ function App() {
       path: "/signup",
       element: <Signup_form />,
     },
-    // {
-    // path: "/user",
-    //   element:
-    //     (isSignedIn && signedInUser ?
-    //       (< UserProfile
-    //         userName={signedInUser.username}
-    //         userEmail={signedInUser.useremail}
-    //       />) : <div className='d-flex justify-content-center align-items-center not-user' style={{
-    //         width: "100%",
-    //         height: "100vh",
-    //       }}><span className='not-user-span'>Your Not SignedIn Please SignIn First</span></div>)
-    // // },
   ]);
 
   return (
