@@ -172,6 +172,45 @@
     background-color: var(--themeColor);
 }
 
+.like {
+    cursor: pointer;
+    color: #000000;
+    font-size: 17px;
+    font-weight: 800;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 0 7px;
+}
+
+.like-btn {
+    color: white;
+    background-color: rgb(231, 83, 72);
+}
+
+.comments-box-con {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comments-box {
+    position: absolute;
+    background-color: violet;
+    padding: 20px;
+    width: 70%;
+    z-index: 1;
+    display: none;
+}
+
+.d-block {
+    display: block;
+}
+
 @media only screen and (min-width:0px) and (max-width:992px) {
     .navbar-nav .nav-link {
         border-radius: 5px;

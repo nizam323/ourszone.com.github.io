@@ -1,16 +1,81 @@
-import React from "react";
+import React, { useRef, useState, useContext } from "react";
+import { UserContext } from '../App'
 
 function Posts() {
 
+    let likeBtn = useRef()
+    let [likesCount, setLikesCount] = useState(0)
+    let [likes, setLikes] = useState(true);
+
     let date = new Date();
-    let posts = [{
-        text: "i am post",
-        profileName: "user name",
-        url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
-        hr: date.getHours(),
-        min: date.getMinutes(),
-        sec: date.getSeconds(),
-    }];
+    let posts = [
+        {
+            text: "i am post",
+            profileName: "user name",
+            url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
+            hr: date.getHours(),
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        },
+        {
+            text: "i am post",
+            profileName: "user name",
+            url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
+            hr: date.getHours(),
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        },
+        {
+            text: "i am post",
+            profileName: "user name",
+            url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
+            hr: date.getHours(),
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        },
+        {
+            text: "i am post",
+            profileName: "user name",
+            url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
+            hr: date.getHours(),
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        },
+        {
+            text: "i am post",
+            profileName: "user name",
+            url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
+            hr: date.getHours(),
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        },
+        {
+            text: "i am post",
+            profileName: "user name",
+            url: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
+            hr: date.getHours(),
+            min: date.getMinutes(),
+            sec: date.getSeconds(),
+        },
+    ];
+
+    function like() {
+        if (likes === true) {
+            likeBtn.current.className = "like like-btn"
+            setLikesCount(likesCount + 1)
+            setLikes(false)
+        } else {
+            likeBtn.current.className = "like"
+            setLikesCount(likesCount - 1)
+            setLikes(!likes)
+        }
+    }
+
+    let { commentsBtn } = useContext(UserContext)
+
+    function showComments() {
+        commentsBtn.current.classList.toggle("d-block")
+    }
 
     return (
         <>
@@ -49,10 +114,21 @@ function Posts() {
                                 <p className="card-text">{post.text}</p>
                             </div>
                             {post.url && <img src={post.url} className="card-img-top" alt={`Post ${index}`} />}
+                            <div className="d-flex justify-content-around m-3">
+                                <div className="like" ref={likeBtn} onClick={like}>Like {likesCount > 0 && likesCount}</div>
+                                <div className="like" onClick={showComments}>Comments</div>
+
+
+                            </div>
+                                <div className="comments-box-con">
+                                    <div ref={commentsBtn} className="comments-box">X</div>
+                                </div>
+
+
                         </div>
                     ))
                 )}
-            </div>
+            </div >
         </>
     )
 }

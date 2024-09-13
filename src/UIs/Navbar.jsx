@@ -34,9 +34,6 @@ function Navbar() {
                                     <li><a className="dropdown-item" href="#">Something else here</a></li>
                                 </ul>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link disabled" href="#" tabIndex="-1" aria-disabled="true">Disabled</a>
-                            </li>
                         </ul>
                         <form className="d-flex">
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
