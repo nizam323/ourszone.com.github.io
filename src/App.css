@@ -190,6 +190,10 @@
     background-color: rgb(231, 83, 72);
 }
 
+.com-btn{
+    background-color: #cccccc;
+}
+
 .comments-box-con {
     position: relative;
     width: 100%;
@@ -199,16 +203,38 @@
 }
 
 .comments-box {
-    position: absolute;
-    background-color: violet;
+    margin-bottom: 2px;
+    background-color: #cccccc;
     padding: 20px;
-    width: 70%;
-    z-index: 1;
-    display: none;
+    width: 98%;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-comments{
+    align-self: flex-end;
+    cursor: pointer;
+    width: 20px;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.close-comments:hover{
+    background-color: #9e9b9b;
 }
 
 .d-block {
     display: block;
+}
+
+.com-img img {
+    margin: 10px 15px 0 10px;
+    border: 1px solid;
+    border-radius: 50%;
+}
+
+.comments-con{
+    display: flex;
 }
 
 @media only screen and (min-width:0px) and (max-width:992px) {
