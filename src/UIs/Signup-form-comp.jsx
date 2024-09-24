@@ -37,7 +37,7 @@ function Signup_form() {
                     return updatedUsers;
                 });
 
-                createUserWithEmailAndPassword(auth, userEmail, userPassword)
+                createUserWithEmailAndPassword(auth, userEmail, userPassword).then((value)=>{console.log(value)})
 
                 window.alert("signup sucessfull");
                 regUsers.push(newUser)
