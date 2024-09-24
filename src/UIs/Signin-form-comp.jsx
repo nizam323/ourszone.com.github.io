@@ -25,28 +25,33 @@ function Signin_form() {
     async function dataPush() {
         if (!userEmail || !userPassword) {
             if (!userEmail) setFillInpsEmail(true);
+            else { setFillInpsEmail(false) }
             if (!userPassword) setFillInpPassword(true);
+            else { setFillInpPassword(false) }
             return;
         }
 
         try {
             const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
-            const user = userCredential.user;
+            const userInfo = userCredential.user;
 
             setIsSignedIn(true);
-            setSignedInUser(user);
+            setSignedInUser(userInfo);
 
             setUserPassword("");
             setUserEmail("");
             setFillInpsEmail(false);
             setFillInpPassword(false);
 
-            window.alert("Sign-in successful");
+            window.alert("Signin Successful");
             navigate("/home/user");
 
         } catch (error) {
-            if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+            if (error.code === 'auth/wrong-password'){
                 alert("Invalid Password");
+            }
+            else if(error.code === 'auth/invalid-credential') {
+                alert("Invalid Email Or Password");
             }
             else if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
                 alert("Invalid Email");
@@ -65,7 +70,7 @@ function Signin_form() {
     //     });
 
     //     if (check) {
-    //         if (userEmail && userPassword) {
+    //    if (userEmail && userPassword) {
 
     //             window.alert("signin sucessfull");
 

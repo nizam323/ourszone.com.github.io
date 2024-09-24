@@ -25,10 +25,10 @@ function App() {
         {
           path: "user",
           element:
-            (isSignedIn && signedInUser ?
+            (signedInUser ?
               (< UserProfile
                 userName={signedInUser.username}
-                userEmail={signedInUser.useremail}
+                userEmail={signedInUser.email}
               />) :
               <div className='d-flex justify-content-center align-items-center not-user' style={{
                 width: "100%",

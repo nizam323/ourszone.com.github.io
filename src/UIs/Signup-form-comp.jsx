@@ -23,73 +23,72 @@ function Signup_form() {
     const [fillInpEmail, setFillInpsEmail] = useState(false);
     const [fillInpPassword, setFillInpPassword] = useState(false);
 
-    const check = regUsers.find(items => userEmail === items.useremail);
-    function dataPush() {
-        if (!check) {
-            if (userName && userEmail && userPassword) {
-                const newUser = {
-                    username: userName,
-                    useremail: userEmail,
-                    userpassword: userPassword,
-                };
-                setUsers((prevUsers) => {
-                    const updatedUsers = [...prevUsers, newUser];
-                    return updatedUsers;
-                });
+    // const check = regUsers.find(items => userEmail === items.useremail);
 
-                createUserWithEmailAndPassword(auth, userEmail, userPassword).then((value)=>{console.log(value)})
+    async function dataPush() {
+        if (!userName || !userEmail || !userPassword) {
+            if (!userName) { setFillInpName(true) }
+            else { setFillInpName(false) };
+
+            if (!userEmail) { setFillInpsEmail(true) }
+            else { setFillInpsEmail(false) };
+
+            if (!userPassword) { setFillInpPassword(true) }
+            else { setFillInpPassword(false) };
+        }
+        if (userName && userEmail && userPassword) {
+
+            // const newUser = {
+            //     username: userName,
+            //     useremail: userEmail,
+            //     userpassword: userPassword,
+            // };
+            // setUsers((prevUsers) => {
+            //     const updatedUsers = [...prevUsers, newUser];
+            //     return updatedUsers;
+            // });
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+                const userInfo = userCredential.user;
+                console.log(userInfo);
 
                 window.alert("signup sucessfull");
-                regUsers.push(newUser)
                 setUserPassword("");
                 setUserEmail("");
                 setUserName("");
                 setFillInpName(false);
                 setFillInpsEmail(false);
                 setFillInpPassword(false);
-            } else if (!userName || !userEmail || !userPassword) {
-                if (!userName) { setFillInpName(true) }
-                else { setFillInpName(false) };
-
-                if (!userEmail) { setFillInpsEmail(true) }
-                else { setFillInpsEmail(false) };
-
-                if (!userPassword) { setFillInpPassword(true) }
-                else { setFillInpPassword(false) };
             }
-        } else { window.alert("User Already Exists Try Other Email") };
+            catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    window.alert("User Already Exists Try Other Email.");
+                } else if (error.code === 'auth/invalid-email') {
+                    window.alert("Please Enter Valid Email.");
+                } else if (error.code === 'auth/weak-password') {
+                    window.alert("The password Must Contain 6 Letters.");
+                } else {
+                    console.error(error.message);
+                }
+            };
+        }
     }
 
     return (
-
         <>
-
             <div className="parent">
                 <div className="login-page-con">
                     <div className="btn-sm-con">
-
                         <NavLink to={"/"} >
                             <Btn_sm
-                                // bg_color={isSignInVisible ? "#e75348" : "rgb(222, 215, 215)"}
-                                // color={isSignInVisible ? "white" : "black"}
                                 btn_txt="SignIn"
                                 id="signin-btn"
-                            // onClick={handleSigninClick}
                             /></NavLink>
 
                         <NavLink to={"/signup"} className={({ isActive }) => isActive ? "activeBtn btn-sm" : ''} >
                             SignUp
-                            {/* <Btn_sm */}
-                            {/* // bg_color={!isSignInVisible ? "#e75348" : "rgb(222, 215, 215)"} */}
-                            {/* // color={!isSignInVisible ? "white" : "black"} */}
-                            {/* btn_txt="SignUp" */}
-                            {/* id="signup-btn" */}
-                            {/* // onClick={handleSignupClick} */}
-                            {/* /> */}
                         </NavLink>
-
-
-
                     </div>
 
                     <div className="form-con">
