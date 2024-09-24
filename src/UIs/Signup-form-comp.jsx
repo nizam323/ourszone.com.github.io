@@ -5,6 +5,14 @@ import { regUsers } from "../components/Data";
 import { NavLink } from "react-router-dom";
 import Btn_sm from "../components/Btn-sm";
 
+
+import { getDatabase, ref, set } from "firebase/database";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { app } from "../firebase";
+
+const db = getDatabase(app);
+const auth = getAuth(app);
+
 function Signup_form() {
 
     const [users, setUsers] = useState([]);
@@ -28,7 +36,9 @@ function Signup_form() {
                     const updatedUsers = [...prevUsers, newUser];
                     return updatedUsers;
                 });
-                
+
+                createUserWithEmailAndPassword(auth, userEmail, userPassword)
+
                 window.alert("signup sucessfull");
                 regUsers.push(newUser)
                 setUserPassword("");
