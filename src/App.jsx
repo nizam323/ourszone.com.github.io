@@ -15,6 +15,7 @@ function App() {
   const [loginpageDisplay, setLoginpageDisplay] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [signedInUser, setSignedInUser] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const router = createBrowserRouter([
     {
@@ -58,7 +59,7 @@ function App() {
   return (
     <UserContext.Provider value={{
       loginpageDisplay, setLoginpageDisplay,
-      isSignedIn, setIsSignedIn, signedInUser, setSignedInUser
+      isSignedIn, setIsSignedIn, signedInUser, setSignedInUser, loader, setLoader
     }}>
       <RouterProvider router={router} />
     </UserContext.Provider>
