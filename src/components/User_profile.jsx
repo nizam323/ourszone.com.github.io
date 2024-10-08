@@ -10,7 +10,7 @@ const auth = getAuth(app);
 function UserProfile({ userName, userEmail }) {
 
     let date = new Date();
-    const { setLoginpageDisplay, setIsSignedIn } = useContext(UserContext);
+    const { setIsSignedIn } = useContext(UserContext);
 
     const [city, setCity] = useState("")
     const [status, setStatus] = useState("")

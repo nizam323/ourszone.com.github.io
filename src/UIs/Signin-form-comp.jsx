@@ -35,7 +35,7 @@ function Signin_form() {
 
 
         if (userEmail && userPassword) {
-            setLoader(true);
+            // setLoader(true);
 
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);

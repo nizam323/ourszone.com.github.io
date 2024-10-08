@@ -240,8 +240,6 @@
 .loader {
     color: var(--themeColor);
     position: absolute;
-    top: 50%;
-    left: 50%;
     border: 5px dashed;
     z-index: 2;
 }
@@ -263,6 +261,9 @@
     height: 100%;
     position: absolute;
     background: #b8b8b85e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media only screen and (min-width:0px) and (max-width:992px) {

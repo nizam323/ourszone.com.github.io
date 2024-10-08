@@ -8,11 +8,12 @@ import { Signup_form } from './UIs/Signup-form-comp.jsx';
 import ErrorPage from './error-page.jsx';
 import Home from './UIs/Home.jsx';
 import Posts from './components/Posts.jsx';
+import ProutectedRoutes from './protectedRoutes/ProutectedRoutes.jsx';
 
 export const UserContext = createContext();
 
 function App() {
-  const [loginpageDisplay, setLoginpageDisplay] = useState(true);
+  // const [loginpageDisplay, setLoginpageDisplay] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [signedInUser, setSignedInUser] = useState("");
   const [loader, setLoader] = useState(false);
@@ -20,27 +21,28 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/home",
-      element: <Home />,
+      element:
+        <ProutectedRoutes>
+          <Home />
+        </ProutectedRoutes>,
       errorElement: <ErrorPage />,
       children: [
         {
           path: "user",
           element:
-            (signedInUser ?
-              (< UserProfile
-                userName={signedInUser.username||"hello world"}
-                userEmail={signedInUser.email}
-              />) :
-              <div className='d-flex justify-content-center align-items-center not-user' style={{
-                width: "100%",
-                height: "100vh",
-              }}><span className='not-user-span'>Your Not SignedIn Please SignIn First</span></div>
-            )
-
+            <ProutectedRoutes>
+              < UserProfile
+                userName={signedInUser.username || "hello world"}
+                userEmail={signedInUser.email} />
+            </ProutectedRoutes>
         },
         {
           path: "",
-          element: <Posts />,
+          element:
+            <ProutectedRoutes>
+              <Posts />
+            </ProutectedRoutes>
+          ,
 
         }
       ]
@@ -58,7 +60,6 @@ function App() {
 
   return (
     <UserContext.Provider value={{
-      loginpageDisplay, setLoginpageDisplay,
       isSignedIn, setIsSignedIn, signedInUser, setSignedInUser, loader, setLoader
     }}>
       <RouterProvider router={router} />
