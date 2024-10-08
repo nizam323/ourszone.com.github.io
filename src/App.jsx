@@ -28,7 +28,7 @@ function App() {
           element:
             (signedInUser ?
               (< UserProfile
-                userName={signedInUser.username}
+                userName={signedInUser.username||"hello world"}
                 userEmail={signedInUser.email}
               />) :
               <div className='d-flex justify-content-center align-items-center not-user' style={{

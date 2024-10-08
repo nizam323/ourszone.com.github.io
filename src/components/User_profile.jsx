@@ -2,6 +2,10 @@ import React, { useState, useContext } from "react";
 import Btn_sm from "../components/Btn-sm";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import { signOut ,getAuth } from "firebase/auth";
+import { app } from "../firebase";
+
+const auth = getAuth(app);
 
 function UserProfile({ userName, userEmail }) {
 
@@ -34,10 +38,9 @@ function UserProfile({ userName, userEmail }) {
         }
     }
 
-    function signOut() {
+    function mySignOut() {
         if (window.confirm("Are you sure you want to Sign Out?")) {
-            setIsSignedIn(false);
-            setLoginpageDisplay(true);
+            signOut(auth);
             navigate("/");
         }
     }
@@ -111,7 +114,7 @@ function UserProfile({ userName, userEmail }) {
                                             <p className="small text-muted mb-0">Following</p>
                                         </div> */}
                                     </div>
-                                    <Btn_sm onClick={signOut} id="signOutBtn" btn_txt="SignOut" />
+                                    <Btn_sm onClick={mySignOut} id="signOutBtn" btn_txt="SignOut" />
                                 </div>
                                 <div className="card-body p-4 text-black">
                                     <div className="mb-4 text-body">

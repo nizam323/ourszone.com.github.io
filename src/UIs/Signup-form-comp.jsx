@@ -8,7 +8,6 @@ import Btn_sm from "../components/Btn-sm";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase";
-import Loader from "../components/Loader";
 import ShowLoader from "../components/ShowLoader";
 import { UserContext } from "../App";
 
@@ -70,16 +69,12 @@ function Signup_form() {
             catch (error) {
                 setLoader(false)
                 if (error.code === 'auth/email-already-in-use') {
-                    setLoader(false)
                     window.alert("User Already Exists Try Other Email.");
                 } else if (error.code === 'auth/invalid-email') {
-                    setLoader(false)
                     window.alert("Please Enter Valid Email.");
                 } else if (error.code === 'auth/weak-password') {
-                    setLoader(false)
                     window.alert("The password Must Contain 6 Letters.");
                 } else {
-                    setLoader(false)
                     console.error(error.message);
                 }
             };
@@ -88,62 +83,50 @@ function Signup_form() {
 
     return (
         <>
+            {loader && <ShowLoader />}
 
-            <Loader>
+            <div className="parent">
+                <div className="login-page-con">
+                    <div className="btn-sm-con">
+                        <NavLink to={"/"} >
+                            <Btn_sm
+                                btn_txt="SignIn"
+                                id="signin-btn"
+                            /></NavLink>
 
-                {loader && <ShowLoader />}
+                        <NavLink to={"/signup"} className={({ isActive }) => isActive ? "activeBtn btn-sm" : ''} >
+                            SignUp
+                        </NavLink>
+                    </div>
 
-                <div className="parent">
-                    <div className="login-page-con">
-                        <div className="btn-sm-con">
-                            <NavLink to={"/"} >
-                                <Btn_sm
-                                    btn_txt="SignIn"
-                                    id="signin-btn"
-                                /></NavLink>
-
-                            <NavLink to={"/signup"} className={({ isActive }) => isActive ? "activeBtn btn-sm" : ''} >
-                                SignUp
-                            </NavLink>
-                        </div>
-
-                        <div className="form-con">
-                            <h2 className="sign-h2">SignUp</h2>
+                    <div className="form-con">
+                        <h2 className="sign-h2">SignUp</h2>
+                        <br />
+                        <br />
+                        <div className="inp-con">
+                            <Form_inp value={userName} onChange={(e) => { setUserName(e.target.value) }} type="text" placeholder="Username" />
+                            {fillInpName &&
+                                <ErrorFillInput />
+                            }
                             <br />
+                            <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
+                            {fillInpEmail &&
+                                <ErrorFillInput />
+                            }
                             <br />
-                            <div className="inp-con">
-                                <Form_inp value={userName} onChange={(e) => { setUserName(e.target.value) }} type="text" placeholder="Username" />
-                                {fillInpName &&
-                                    <ErrorFillInput />
-                                }
-                                <br />
-                                <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
-                                {fillInpEmail &&
-                                    <ErrorFillInput />
-                                }
-                                <br />
-                                <span style={{
-                                    width: "80%",
-                                    display: "flex",
-                                    alignItems: "center"
-                                }}>
-                                    <Form_inp onChange={(e) => { setUserPassword(e.target.value) }} value={userPassword} type={hidePassword ? "password" : "text"} placeholder="Password"
-                                    >
-                                        <div style={{ position: "absolute" }} onClick={() => { setHidePassword(!hidePassword) }}>KKK</div>
-                                    </Form_inp>
-                                </span>
-                                {fillInpPassword &&
-                                    <ErrorFillInput />
-                                }
-                                <br />
-                                <button className="signin-btn" onClick={dataPush}>SignUp</button>
-                            </div>
+                            <Form_inp onChange={(e) => { setUserPassword(e.target.value) }} value={userPassword} type={hidePassword ? "password" : "text"} placeholder="Password"
+                            />
+                            {fillInpPassword &&
+                                <ErrorFillInput />
+                            }
+                            <br />
+                            <div>{hidePassword ? "Show Password" : "Hide Password"} <span><input onClick={() => { setHidePassword(!hidePassword) }} type="checkbox" /></span></div>
+                            <br />
+                            <button className="signin-btn" onClick={dataPush}>SignUp</button>
                         </div>
                     </div>
                 </div>
-            </Loader>
-
-
+            </div>
         </>)
 };
 
