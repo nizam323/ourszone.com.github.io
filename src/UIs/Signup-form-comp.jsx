@@ -11,7 +11,7 @@ import { app } from "../firebase";
 import ShowLoader from "../components/ShowLoader";
 import { UserContext } from "../App";
 
-const db = getDatabase(app);
+const dataBase = getDatabase(app);
 const auth = getAuth(app);
 
 function Signup_form() {
@@ -55,8 +55,15 @@ function Signup_form() {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
                 setLoader(false)
+
                 const userInfo = userCredential.user;
-                console.log(userInfo);
+
+                // await set(ref(dataBase, 'users_info/' + userInfo.uid), {
+                //     username: "hi",
+                //     email: userInfo.email,
+                //     profile_picture: userInfo.photoURL || '',
+                // });
+                // console.log(userInfo);
 
                 window.alert("signup sucessfull");
                 setUserPassword("");

@@ -13,7 +13,7 @@ export default function ProutectedRoutes({ children }) {
         const isSignedIn = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setIsAuth(true);
-                console.log(user);
+                // console.log(user);
             } else {
                 setIsAuth(false);
                 navigate("/");
