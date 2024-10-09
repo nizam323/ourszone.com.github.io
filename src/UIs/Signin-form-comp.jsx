@@ -38,31 +38,21 @@ function Signin_form() {
 
         if (userEmail && userPassword) {
             // setLoader(true);
-
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
                 const userInfo = userCredential.user;
 
-                // await 
-                onValue(ref(dataBase, 'users_info/' + userInfo.uid),
-
-                    (snapshot) => {
-                        console.log(snapshot.val().id);
-                    }
-
-                    //  {
-                    //     id: userInfo.uid,
-                    //     username: name || '',
-                    //     email: userInfo.email,
-                    //     profile_picture: userInfo.photoURL || '',
-                    //     profession:'',
-                    //     city:'',
-                    //     status:'',
-                    // }
-
-                );
+                await set(ref(dataBase, 'users_info/' + userInfo.uid),
+                    {
+                        id: userInfo.uid,
+                        username: userInfo.displayName || '',
+                        email: userInfo.email,
+                        profile_picture: userInfo.photoURL || '',
+                        profession: '',
+                        city: '',
+                        status: '',
+                    })
                 console.log(userInfo);
-
 
                 setIsSignedIn(true);
                 setSignedInUser(userInfo);
@@ -74,7 +64,6 @@ function Signin_form() {
 
                 window.alert("Signin Successful");
                 navigate("/home/user");
-
 
             } catch (error) {
                 if (error.code === 'auth/wrong-password') {

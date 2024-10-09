@@ -31,9 +31,7 @@ function App() {
           path: "user",
           element:
             <ProutectedRoutes>
-              < UserProfile
-                userName={signedInUser.username || "hello world"}
-                userEmail={signedInUser.email} />
+              < UserProfile />
             </ProutectedRoutes>
         },
         {

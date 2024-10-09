@@ -19,27 +19,22 @@ function Signup_form() {
     const { loader, setLoader } = useContext(UserContext);
 
     const [hidePassword, setHidePassword] = useState(true);
-    const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
-    const [fillInpName, setFillInpName] = useState(false);
     const [fillInpEmail, setFillInpsEmail] = useState(false);
     const [fillInpPassword, setFillInpPassword] = useState(false);
 
     // const check = regUsers.find(items => userEmail === items.useremail);
 
     async function dataPush() {
-        if (!userName || !userEmail || !userPassword) {
-            if (!userName) { setFillInpName(true) }
-            else { setFillInpName(false) };
-
+        if (!userEmail || !userPassword) {
             if (!userEmail) { setFillInpsEmail(true) }
             else { setFillInpsEmail(false) };
 
             if (!userPassword) { setFillInpPassword(true) }
             else { setFillInpPassword(false) };
         }
-        if (userName && userEmail && userPassword) {
+        if (userEmail && userPassword) {
             setLoader(true)
 
             // const newUser = {
@@ -58,18 +53,9 @@ function Signup_form() {
 
                 const userInfo = userCredential.user;
 
-                // await set(ref(dataBase, 'users_info/' + userInfo.uid), {
-                //     username: "hi",
-                //     email: userInfo.email,
-                //     profile_picture: userInfo.photoURL || '',
-                // });
-                // console.log(userInfo);
-
                 window.alert("signup sucessfull");
                 setUserPassword("");
                 setUserEmail("");
-                setUserName("");
-                setFillInpName(false);
                 setFillInpsEmail(false);
                 setFillInpPassword(false);
             }
@@ -111,11 +97,6 @@ function Signup_form() {
                         <br />
                         <br />
                         <div className="inp-con">
-                            <Form_inp value={userName} onChange={(e) => { setUserName(e.target.value) }} type="text" placeholder="Username" />
-                            {fillInpName &&
-                                <ErrorFillInput />
-                            }
-                            <br />
                             <Form_inp onChange={(e) => { setUserEmail(e.target.value) }} value={userEmail} type="email" placeholder="Email" />
                             {fillInpEmail &&
                                 <ErrorFillInput />

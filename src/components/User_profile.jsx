@@ -1,13 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Btn_sm from "../components/Btn-sm";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
-import { signOut ,getAuth } from "firebase/auth";
+import { signOut, getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase";
+import { onValue, ref, getDatabase } from "firebase/database";
 
 const auth = getAuth(app);
+const dataBase = getDatabase(app);
 
-function UserProfile({ userName, userEmail }) {
+function UserProfile() {
+
+    useEffect(() => {
+
+        let check = onAuthStateChanged(auth, (user) => {
+            onValue(ref(dataBase, 'users_info/' + user.uid),
+
+                (snapshot) => {
+                    let userData = snapshot.val();
+                    setUserData(userData);
+                    console.log(userData)
+                });
+        })
+
+        return () => check() 
+    }, [])
 
     let date = new Date();
     const { setIsSignedIn } = useContext(UserContext);
@@ -15,8 +32,11 @@ function UserProfile({ userName, userEmail }) {
     const [city, setCity] = useState("")
     const [status, setStatus] = useState("")
     const [profession, setProfession] = useState("")
-    const [proSrc, setProSrc] = useState("https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp")
-    const [name, setName] = useState(userName)
+    const [proSrc, setProSrc] = useState("")
+    const [userData, setUserData] = useState({})
+
+
+
     const [posts, setPosts] = useState([]);
     const [postTxt, setPostTxt] = useState([]);
     const [postUrl, setPostUrl] = useState([]);
@@ -74,14 +94,14 @@ function UserProfile({ userName, userEmail }) {
     return (
         <>
             <section className="h-100 gradient-custom-2">
-                <div className="container py-3 h-100" style={{backgroundColor:'#000000'}}>
+                <div className="container py-3 h-100" style={{ backgroundColor: '#000000' }}>
                     <div className="row d-flex justify-content-center">
-                        <div className="col col-lg-9 col-xl-8" style={{width:'100%',}}>
+                        <div className="col col-lg-9 col-xl-8" style={{ width: '100%', }}>
                             <div className="card">
                                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
                                         <img
-                                            src={proSrc ? proSrc : "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"}
+                                            src={proSrc ? proSrc : "../../images/istockphoto-1300845620-612x612.jpg"}
                                             alt="Your Profile Photo"
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: '150px', height: '100%', zIndex: 1 }}
@@ -96,7 +116,7 @@ function UserProfile({ userName, userEmail }) {
                                         </button>
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
-                                        <h5 className="about-edit" onClick={edit_name}>{name && name.trim() !== "" ? name : userName}</h5>
+                                        <h5 className="about-edit" onClick={edit_name}>{name && name.trim() !== "" ? name : ""}</h5>
                                     </div>
                                 </div>
                                 <div className="p-4 text-black bg-body-tertiary">
@@ -123,7 +143,7 @@ function UserProfile({ userName, userEmail }) {
                                             <p className="font-italic mb-1 about-edit" onClick={edit_about1}>{profession || 'Your Profession'}</p>
                                             <p className="font-italic mb-1 about-edit" onClick={edit_about2}>{`Lives in ${city}` || "Your City"}</p>
                                             <p className="font-italic mb-1 about-edit" onClick={edit_about3}>{status || "Your Status"}</p>
-                                            <p>Your Email {userEmail}</p>
+                                            <p>Your Email {userData.email}</p>
                                         </div>
                                     </div>
                                     {/* 
