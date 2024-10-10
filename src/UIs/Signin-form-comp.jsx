@@ -8,7 +8,7 @@ import Btn_sm from "../components/Btn-sm";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase";
 import ShowLoader from "../components/ShowLoader";
-import { getDatabase, set, ref, onValue } from "firebase/database";
+import { getDatabase, set, ref, onValue, update } from "firebase/database";
 
 const auth = getAuth(app)
 const dataBase = getDatabase(app)
@@ -42,15 +42,10 @@ function Signin_form() {
                 const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
                 const userInfo = userCredential.user;
 
-                await set(ref(dataBase, 'users_info/' + userInfo.uid),
+                await update(ref(dataBase, 'users_info/' + userInfo.uid),
                     {
                         id: userInfo.uid,
-                        username: userInfo.displayName || '',
                         email: userInfo.email,
-                        profile_picture: userInfo.photoURL || '',
-                        profession: '',
-                        city: '',
-                        status: '',
                     })
                 console.log(userInfo);
 

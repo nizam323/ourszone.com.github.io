@@ -14,6 +14,9 @@ export default function ProutectedRoutes({ children }) {
             if (user) {
                 setIsAuth(true);
                 // console.log(user);
+                if (window.location.href == "http://localhost:5173/" || "http://localhost:5173/signup") {
+                    navigate("/home");
+                }
             } else {
                 setIsAuth(false);
                 navigate("/");

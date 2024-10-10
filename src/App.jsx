@@ -48,12 +48,18 @@ function App() {
     },
     {
       path: "/",
-      element: <Signin_form />,
+      element:
+        <ProutectedRoutes>
+          <Signin_form />
+        </ProutectedRoutes>,
       errorElement: <ErrorPage />,
     },
     {
       path: "/signup",
-      element: <Signup_form />,
+      element:
+        <ProutectedRoutes>
+          <Signup_form />
+        </ProutectedRoutes>,
     },
     {
       path: "/edit",

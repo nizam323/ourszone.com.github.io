@@ -116,7 +116,7 @@ function UserProfile() {
                                             type="button"
                                             className="btn btn-outline-dark"
                                             style={{ zIndex: 1 }}
-                                            // onClick={curd}
+                                        // onClick={curd}
                                         >
                                             <Link to="/edit">
                                                 Edit profile
@@ -152,9 +152,9 @@ function UserProfile() {
                                     <div className="mb-4 text-body">
                                         <p className="lead fw-normal mb-1">About</p>
                                         <div className="p-4 bg-body-tertiary">
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about1}>{profession || 'Your Profession'}</p>
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about2}>{`Lives in ${city}` || "Your City"}</p>
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about3}>{status || "Your Status"}</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about1}>Your Profession {userData.profession}</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about2}>Your City {userData.city}</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about3}>Your Status {userData.status}</p>
                                             <p>Your Email {userData.email}</p>
                                         </div>
                                     </div>
