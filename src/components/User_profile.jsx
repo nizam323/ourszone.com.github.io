@@ -1,29 +1,34 @@
 import React, { useState, useEffect, useContext } from "react";
 import Btn_sm from "../components/Btn-sm";
 import { UserContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut, getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase";
 import { onValue, ref, getDatabase } from "firebase/database";
+import ShowLoader from "./ShowLoader";
 
 const auth = getAuth(app);
 const dataBase = getDatabase(app);
 
 function UserProfile() {
 
+    const [loader, setLoader] = useState(false);
+
     useEffect(() => {
-
+        setLoader(true)
         let check = onAuthStateChanged(auth, (user) => {
-            onValue(ref(dataBase, 'users_info/' + user.uid),
-
-                (snapshot) => {
-                    let userData = snapshot.val();
-                    setUserData(userData);
-                    console.log(userData)
-                });
+            if (user) {
+                onValue(ref(dataBase, 'users_info/' + user.uid),
+                    async (snapshot) => {
+                        let userData = await snapshot.val();
+                        setLoader(false);
+                        setUserData(userData);
+                    });
+            } else {
+                setUserData(null)
+            }
         })
-
-        return () => check() 
+        return () => check()
     }, [])
 
     let date = new Date();
@@ -61,7 +66,7 @@ function UserProfile() {
     function mySignOut() {
         if (window.confirm("Are you sure you want to Sign Out?")) {
             signOut(auth);
-            navigate("/");
+            // navigate("/");
         }
     }
 
@@ -94,6 +99,7 @@ function UserProfile() {
     return (
         <>
             <section className="h-100 gradient-custom-2">
+                {loader && <ShowLoader />}
                 <div className="container py-3 h-100" style={{ backgroundColor: '#000000' }}>
                     <div className="row d-flex justify-content-center">
                         <div className="col col-lg-9 col-xl-8" style={{ width: '100%', }}>
@@ -110,13 +116,19 @@ function UserProfile() {
                                             type="button"
                                             className="btn btn-outline-dark"
                                             style={{ zIndex: 1 }}
-                                            onClick={curd}
+                                            // onClick={curd}
                                         >
-                                            Edit profile
+                                            <Link to="/edit">
+                                                Edit profile
+                                            </Link>
+
                                         </button>
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
-                                        <h5 className="about-edit" onClick={edit_name}>{name && name.trim() !== "" ? name : ""}</h5>
+                                        <h5 className="about-edit" onClick={edit_name}>{
+                                            // name && name.trim() !== "" ? name : ""
+                                            userData.username
+                                        }</h5>
                                     </div>
                                 </div>
                                 <div className="p-4 text-black bg-body-tertiary">

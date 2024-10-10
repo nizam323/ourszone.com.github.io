@@ -9,6 +9,7 @@ import ErrorPage from './error-page.jsx';
 import Home from './UIs/Home.jsx';
 import Posts from './components/Posts.jsx';
 import ProutectedRoutes from './protectedRoutes/ProutectedRoutes.jsx';
+import Edit from "./components/Edit.jsx";
 
 export const UserContext = createContext();
 
@@ -53,6 +54,10 @@ function App() {
     {
       path: "/signup",
       element: <Signup_form />,
+    },
+    {
+      path: "/edit",
+      element: <Edit />,
     },
   ]);
 
