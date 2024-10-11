@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Form_inp from "./Form-input";
-import { getDatabase, set, ref, update, onValue } from "firebase/database";
+import { getDatabase, ref, update, onValue } from "firebase/database";
 import { app } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 
 const dataBase = getDatabase(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
 function Edit() {
     const [userName, setUserName] = useState("");
@@ -14,6 +16,7 @@ function Edit() {
     const [status, setStatus] = useState("");
     const [profession, setProfession] = useState("");
     const [profilePic, setProfilePic] = useState("");
+    const [profileURL, setProfileURL] = useState();
 
     const [userData, setUserData] = useState("");
     const navigate = useNavigate();
@@ -25,7 +28,6 @@ function Edit() {
                     async (snapshot) => {
                         let userData = await snapshot.val();
                         setUserData(userData);
-                        console.log(userData);
                     });
             } else {
                 setUserData(null)
@@ -37,15 +39,22 @@ function Edit() {
 
     async function putData() {
         if (userData) {
-            if (userName || profession || city || status)
+            let downloadProfileURL = profileURL;
+            if (profilePic) {
+                const proImgRef = storageRef(storage, `upload/images/user${Date.now()}-${profilePic.name}`)
+                await uploadBytes(proImgRef, profilePic)
+                downloadProfileURL = await getDownloadURL(proImgRef);
+            };
+            if (userName || profession || city || status || profileURL) {
                 await update(ref(dataBase, 'users_info/' + userData.id),
                     {
                         username: userName || userData.username,
                         profession: profession || userData.profession,
                         city: city || userData.city,
                         status: status || userData.status,
-                        // profile_picture: userInfo.photoURL || '',
-                    });
+                        profile_picture_URL: downloadProfileURL || userData.profile_picture_URL,
+                    })
+            };
             navigate("/home/user")
         }
     }
@@ -91,19 +100,30 @@ function Edit() {
                                 value={profession}
                                 type="text" placeholder="Enter Profession" />
                             <br />
-                            <label htmlFor="">Select Profile Picture</label>
-                            <input
-                                onChange={
-                                    (e) => setProfilePic(e.target.value)
-                                }
-                                value={profilePic}
-                                type="file" />
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                border: "2px solid rgb(222, 215, 215)",
+                                backgroundColor: "rgb(255 255 255)",
+                                padding: "10px"
+                            }}>
+                                <label htmlFor="">Select Profile Picture</label>
+                                <br />
+                                <input
+                                    style={{ width: "207px" }}
+                                    onChange={
+                                        (e) => setProfilePic(e.target.files[0])
+                                    }
+                                    type="file" />
+                            </div>
                             <br />
-                            <button onClick={putData}>Save</button>
+                            <button style={{ backgroundColor: "rgb(231 83 72)", border: "1px solid", color: "" }} className="btn btn-outline-dark" onClick={putData}><span className="text-white">Save</span></button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

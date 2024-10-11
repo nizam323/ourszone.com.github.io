@@ -49,17 +49,17 @@ function App() {
     {
       path: "/",
       element:
-        <ProutectedRoutes>
-          <Signin_form />
-        </ProutectedRoutes>,
+        // <ProutectedRoutes>
+        <Signin_form />,
+      // </ProutectedRoutes>,
       errorElement: <ErrorPage />,
     },
     {
       path: "/signup",
       element:
-        <ProutectedRoutes>
-          <Signup_form />
-        </ProutectedRoutes>,
+        // <ProutectedRoutes>
+        <Signup_form />,
+      // </ProutectedRoutes>,
     },
     {
       path: "/edit",

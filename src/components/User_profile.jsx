@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import Btn_sm from "../components/Btn-sm";
 import { UserContext } from "../App";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { signOut, getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase";
 import { onValue, ref, getDatabase } from "firebase/database";
@@ -107,7 +107,7 @@ function UserProfile() {
                                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
                                         <img
-                                            src={proSrc ? proSrc : "../../images/istockphoto-1300845620-612x612.jpg"}
+                                            src={userData.profile_picture_URL ? userData.profile_picture_URL : "../../images/istockphoto-1300845620-612x612.jpg"}
                                             alt="Your Profile Photo"
                                             className="img-fluid img-thumbnail mt-4 mb-2"
                                             style={{ width: '150px', height: '100%', zIndex: 1 }}
@@ -116,17 +116,14 @@ function UserProfile() {
                                             type="button"
                                             className="btn btn-outline-dark"
                                             style={{ zIndex: 1 }}
-                                        // onClick={curd}
-                                        >
-                                            <Link to="/edit">
-                                                Edit profile
-                                            </Link>
-
+                                            onClick={()=>{
+                                                navigate('/edit')
+                                            }}>
+                                            Edit profile
                                         </button>
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
                                         <h5 className="about-edit" onClick={edit_name}>{
-                                            // name && name.trim() !== "" ? name : ""
                                             userData.username
                                         }</h5>
                                     </div>
@@ -152,10 +149,10 @@ function UserProfile() {
                                     <div className="mb-4 text-body">
                                         <p className="lead fw-normal mb-1">About</p>
                                         <div className="p-4 bg-body-tertiary">
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about1}>Your Profession {userData.profession}</p>
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about2}>Your City {userData.city}</p>
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about3}>Your Status {userData.status}</p>
-                                            <p>Your Email {userData.email}</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about1}>Profession [ {userData.profession} ]</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about2}>City [ {userData.city} ]</p>
+                                            <p className="font-italic mb-1 about-edit" onClick={edit_about3}>Status [ {userData.status} ]</p>
+                                            <p>Email [ {userData.email} ]</p>
                                         </div>
                                     </div>
                                     {/* 
