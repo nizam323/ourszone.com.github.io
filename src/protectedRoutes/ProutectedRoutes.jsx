@@ -12,13 +12,13 @@ export default function ProutectedRoutes({ children }) {
     const [isAuth, setIsAuth] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const uD = useSelector((s) => s.ussrData)
+    const uD = useSelector((s) => s.userData.userIsAuth)
+    
+    console.log(uD);
 
     useEffect(() => {
 
-        // dispatch(isAuthCheck())
-        console.log(uD);
-
+        dispatch(isAuthCheck())
 
         const isSignedIn = onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -35,17 +35,16 @@ export default function ProutectedRoutes({ children }) {
 
         return () => isSignedIn();
     },
-        // []
         [navigate]
     );
 
     if (isAuth === null) {
-        return <ShowLoader />;
+    return <ShowLoader />;
     }
 
     return (
         <>
-            {isAuth ? children : null}
+            {isAuth ? children: null}
         </>
     );
 }

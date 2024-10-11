@@ -1,13 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../../firebase';
 
-export const isAuthCheck = createAsyncThunk('isAuthCheck', async () => {
-    await onAuthStateChanged(auth, (user) => {
-        if (user) {
-            console.log(user);
-        } else {
-            console.log("null");
-        }
-        return user
+const auth = getAuth(app);
+
+export const isAuthCheck = createAsyncThunk('isAuthCheck', () => {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userData = {
+                    uid: user.uid,
+                };
+                resolve(userData);
+            } else {
+                reject("rejected")
+            }
+        })
     });
 })
 
@@ -18,13 +26,17 @@ const initialState = {
 export const isAuth = createSlice({
     name: 'userData',
     initialState,
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(isAuthCheck.fulfilled, (state, action) => {
             state.userIsAuth = action.payload
+            console.log("success")
         });
         builder.addCase(isAuthCheck.pending, () => console.log("pending..."));
-        builder.addCase(isAuthCheck.rejected, () => console.log("rejected"));
+        builder.addCase(isAuthCheck.rejected, () => console.log("rejected", action.error));
     },
 })
+
+export const { } = isAuth.actions
 
 export default isAuth.reducer;
