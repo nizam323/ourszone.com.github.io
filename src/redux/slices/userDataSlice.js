@@ -8,9 +8,9 @@ export const isAuthCheck = createAsyncThunk('isAuthCheck', () => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                const userData = {
-                    uid: user.uid,
-                };
+                let userData= {
+                    uid:user.uid
+                }
                 resolve(userData);
             } else {
                 reject("rejected")

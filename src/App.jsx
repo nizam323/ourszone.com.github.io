@@ -10,6 +10,7 @@ import Home from './UIs/Home.jsx';
 import Posts from './components/Posts.jsx';
 import ProutectedRoutes from './protectedRoutes/ProutectedRoutes.jsx';
 import Edit from "./components/Edit.jsx";
+import CreatePost from './components/CreatePost.jsx';
 
 export const UserContext = createContext();
 
@@ -64,6 +65,10 @@ function App() {
     {
       path: "/edit",
       element: <Edit />,
+    },
+    {
+      path: "/create-post",
+      element: <CreatePost />,
     },
   ]);
 

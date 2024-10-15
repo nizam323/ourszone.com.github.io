@@ -13,6 +13,7 @@ const dataBase = getDatabase(app);
 function UserProfile() {
 
     const [loader, setLoader] = useState(false);
+    const [p, setP] = useState({});
 
     useEffect(() => {
         setLoader(true)
@@ -21,8 +22,12 @@ function UserProfile() {
                 onValue(ref(dataBase, 'users_info/' + user.uid),
                     async (snapshot) => {
                         let userData = await snapshot.val();
-                        setLoader(false);
                         setUserData(userData);
+                        setP(userData);
+                        setLoader(false);
+                        console.log(p);
+                        console.log(userData.posts);
+
                     });
             } else {
                 setUserData(null)
@@ -93,9 +98,6 @@ function UserProfile() {
         setStatus(status)
     }
 
-
-
-
     return (
         <>
             <section className="h-100 gradient-custom-2">
@@ -116,7 +118,7 @@ function UserProfile() {
                                             type="button"
                                             className="btn btn-outline-dark"
                                             style={{ zIndex: 1 }}
-                                            onClick={()=>{
+                                            onClick={() => {
                                                 navigate('/edit')
                                             }}>
                                             Edit profile
@@ -195,48 +197,55 @@ function UserProfile() {
                                     </div>
 
 
-                                    <div onClick={createPost} className="d-flex justify-content-center align-items-center mb-4 text-body mt-5"><h3 className="btn btn-outline-dark"><span>Create Post</span></h3></div>
+                                    <div onClick={() => navigate("/create-post")} className="d-flex justify-content-center align-items-center mb-4 text-body mt-5"><h3 className="btn btn-outline-dark"><span>Create Post</span></h3></div>
 
                                     <p className="lead fw-normal mb-0">Posts</p>
 
                                     <div className="posts">
 
-                                        {posts.length <= 0 ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> :
-                                            posts.map((post, index) => (
-                                                <div key={index} className="mt-5 card" style={{ width: "100%" }}>
-                                                    <span className="d-flex">
-                                                        <img key={index} alt="..." src={"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
-                                                            width: "50px",
-                                                            height: "50px",
-                                                            borderRadius: "50%",
-                                                            border: "1px solid",
-                                                            margin: "10px 15px 0 10px"
-                                                        }} />
-                                                        <div className="d-flex flex-column" style={{ marginTop: '10px' }}>
-                                                            <h4>{name || userName}</h4>
-                                                            <pre>
-                                                                {
-                                                                    date.getDate()
-                                                                    + "/" +
-                                                                    date.getMonth()
-                                                                    + "/" +
-                                                                    date.getFullYear()}
-                                                                {"  "}
-                                                                {
-                                                                    (post.hr <= 9 ? "0" + post.hr : post.hr)
-                                                                    + ':' +
-                                                                    (post.min <= 9 ? "0" + post.min : post.min)
-                                                                    + ':' +
-                                                                    (post.sec <= 9 ? "0" + post.sec : post.sec)
-                                                                }                                                            </pre>
+                                        {
+                                            userData.posts.map((i)=> <h1>{i.postTxt}</h1>)
+                                        }
+
+                                        {
+                                            posts.length <= 0 ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> :
+
+                                                posts.map((post, index) => (
+
+                                                    <div key={index} className="mt-5 card" style={{ width: "100%" }}>
+                                                        <span className="d-flex">
+                                                            <img key={index} alt="..." src={"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
+                                                                width: "50px",
+                                                                height: "50px",
+                                                                borderRadius: "50%",
+                                                                border: "1px solid",
+                                                                margin: "10px 15px 0 10px"
+                                                            }} />
+                                                            <div className="d-flex flex-column" style={{ marginTop: '10px' }}>
+                                                                <h4>{name || userName}</h4>
+                                                                <pre>
+                                                                    {
+                                                                        date.getDate()
+                                                                        + "/" +
+                                                                        date.getMonth()
+                                                                        + "/" +
+                                                                        date.getFullYear()}
+                                                                    {"  "}
+                                                                    {
+                                                                        (post.hr <= 9 ? "0" + post.hr : post.hr)
+                                                                        + ':' +
+                                                                        (post.min <= 9 ? "0" + post.min : post.min)
+                                                                        + ':' +
+                                                                        (post.sec <= 9 ? "0" + post.sec : post.sec)
+                                                                    }                                                            </pre>
+                                                            </div>
+                                                        </span>
+                                                        <div className="card-body">
+                                                            <p className="card-text">{post.title}</p>
                                                         </div>
-                                                    </span>
-                                                    <div className="card-body">
-                                                        <p className="card-text">{post.text}</p>
+                                                        <img src={post.postPicUrl} className="card-img-top" alt={`Post ${index}`} />
                                                     </div>
-                                                    <img src={post.url} className="card-img-top" alt={`Post ${index}`} />
-                                                </div>
-                                            ))}
+                                                ))}
                                     </div>
 
                                 </div>

@@ -12,39 +12,52 @@ export default function ProutectedRoutes({ children }) {
     const [isAuth, setIsAuth] = useState(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const uD = useSelector((s) => s.userData.userIsAuth)
-    
-    console.log(uD);
+    const userIsAuth = useSelector((state) => state.userData);
+
+    // useEffect(() => {
+    //     // const cleanUp = () => {
+    //     dispatch(isAuthCheck());
+    //     if (userIsAuth.userIsAuth) {
+    //         if (userIsAuth.userFound == true) {
+    //             console.log("yes");
+
+    //             setIsAuth(true);
+    //             navigate("/home/user");
+
+    //         }
+    //     } else {
+    //         setIsAuth(false);
+    //         navigate("/");
+    //     }
+    //     // }
+    //     // return () => cleanUp();
+    // }, []);
 
     useEffect(() => {
-
-        dispatch(isAuthCheck())
-
+        // dispatch(isAuthCheck())
         const isSignedIn = onAuthStateChanged(auth, (user) => {
             if (user) {
+                console.log(user);
                 setIsAuth(true);
-                // console.log(user);
                 // if (window.location.href == "http://localhost:5173/" || "http://localhost:5173/signup") {
                 // navigate("/home");
                 // }
-            } else {
+            }
+            else {
                 setIsAuth(false);
                 navigate("/");
             }
         });
-
         return () => isSignedIn();
-    },
-        [navigate]
-    );
+    }, [navigate]);
 
     if (isAuth === null) {
-    return <ShowLoader />;
+        return <ShowLoader />;
     }
 
     return (
         <>
-            {isAuth ? children: null}
+            {isAuth ? children : null}
         </>
     );
 }
