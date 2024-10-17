@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Form_inp from "./Form-input";
-import { getDatabase,set, ref, update, onValue } from "firebase/database";
+import { getDatabase, set, ref, update, onValue, push } from "firebase/database";
 import { app } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "fire
 const dataBase = getDatabase(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
-
+let date = new Date();
 
 export default function CreatePost() {
     const [postTitle, setPostTitle] = useState("");
@@ -43,13 +43,24 @@ export default function CreatePost() {
                 downloadPostURL = await getDownloadURL(postImgRef);
             };
             if (postTitle) {
-                await set(ref(dataBase, 'users_info/' + userData.id + '/posts'),
-                    [
-                        {
-                            postTitle: postTitle,
-                            postPicUrl: downloadPostURL
-                        }
-                    ])
+                const postRef = ref(dataBase, 'users_info/' + userData.id + '/posts');
+                const post = {
+                    postTitle: postTitle,
+                    postPicUrl: downloadPostURL,
+                    date: date.getDate(),
+                    month: date.getMonth(),
+                    year: date.getFullYear(),
+                    hr: date.getHours(),
+                    min: date.getMinutes(),
+                    sec: date.getSeconds(),
+                };
+                await push(postRef, post)
+                    .then(() => {
+                        console.log('Post added successfully!');
+                    })
+                    .catch((error) => {
+                        console.error('Error adding post: ', error);
+                    });
             };
             navigate("/home/user")
         }

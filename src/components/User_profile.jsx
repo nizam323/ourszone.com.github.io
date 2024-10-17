@@ -13,6 +13,7 @@ const dataBase = getDatabase(app);
 function UserProfile() {
 
     const [loader, setLoader] = useState(false);
+    const [posts1, setPosts1] = useState([]);
     const [p, setP] = useState({});
 
     useEffect(() => {
@@ -23,9 +24,10 @@ function UserProfile() {
                     async (snapshot) => {
                         let userData = await snapshot.val();
                         setUserData(userData);
-                        setP(userData);
+                        setPosts1(userData.posts ? Object.values(userData.posts) : []);
+                        // setP(userData);
                         setLoader(false);
-                        console.log(p);
+                        console.log(posts1);
                         console.log(userData.posts);
 
                     });
@@ -36,37 +38,37 @@ function UserProfile() {
         return () => check()
     }, [])
 
-    let date = new Date();
+    // let date = new Date();
     const { setIsSignedIn } = useContext(UserContext);
 
-    const [city, setCity] = useState("")
-    const [status, setStatus] = useState("")
-    const [profession, setProfession] = useState("")
-    const [proSrc, setProSrc] = useState("")
+    // const [city, setCity] = useState("")
+    // const [status, setStatus] = useState("")
+    // const [profession, setProfession] = useState("")
+    // const [proSrc, setProSrc] = useState("")
     const [userData, setUserData] = useState({})
 
 
 
-    const [posts, setPosts] = useState([]);
-    const [postTxt, setPostTxt] = useState([]);
-    const [postUrl, setPostUrl] = useState([]);
+    // const [posts, setPosts] = useState([]);
+    // const [postTxt, setPostTxt] = useState([]);
+    // const [postUrl, setPostUrl] = useState([]);
     const navigate = useNavigate();
 
-    function createPost() {
-        let postTxt = prompt("Enter Title");
-        setPostTxt(postTxt);
-        let postUrl = prompt("Enter Your Image Source");
-        setPostUrl(postUrl);
-        if (postTxt && postUrl) {
-            setPosts([...posts, {
-                text: postTxt,
-                url: postUrl,
-                hr: date.getHours(),
-                min: date.getMinutes(),
-                sec: date.getSeconds(),
-            }]);
-        }
-    }
+    // function createPost() {
+    //     let postTxt = prompt("Enter Title");
+    //     setPostTxt(postTxt);
+    //     let postUrl = prompt("Enter Your Image Source");
+    //     setPostUrl(postUrl);
+    //     if (postTxt && postUrl) {
+    //         setPosts([...posts, {
+    //             text: postTxt,
+    //             url: postUrl,
+    //             hr: date.getHours(),
+    //             min: date.getMinutes(),
+    //             sec: date.getSeconds(),
+    //         }]);
+    //     }
+    // }
 
     function mySignOut() {
         if (window.confirm("Are you sure you want to Sign Out?")) {
@@ -75,28 +77,28 @@ function UserProfile() {
         }
     }
 
-    function edit_name() {
-        let name = prompt("Enter Your Name");
-        setName(name)
-    }
+    // function edit_name() {
+    //     let name = prompt("Enter Your Name");
+    //     setName(name)
+    // }
 
-    function curd() {
-        let proSrc = prompt("Enter Your profile URL");
-        setProSrc(proSrc)
-    }
+    // function curd() {
+    //     let proSrc = prompt("Enter Your profile URL");
+    //     setProSrc(proSrc)
+    // }
 
-    function edit_about1() {
-        let profession = prompt("Enter Your Profession");
-        setProfession(profession)
-    }
-    function edit_about2() {
-        let city = prompt("Enter City");
-        setCity(city)
-    }
-    function edit_about3() {
-        let status = prompt("Enter Your Status");
-        setStatus(status)
-    }
+    // function edit_about1() {
+    //     let profession = prompt("Enter Your Profession");
+    //     setProfession(profession)
+    // }
+    // function edit_about2() {
+    //     let city = prompt("Enter City");
+    //     setCity(city)
+    // }
+    // function edit_about3() {
+    //     let status = prompt("Enter Your Status");
+    //     setStatus(status)
+    // }
 
     return (
         <>
@@ -125,7 +127,7 @@ function UserProfile() {
                                         </button>
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
-                                        <h5 className="about-edit" onClick={edit_name}>{
+                                        <h5 className="about-edit">{
                                             userData.username
                                         }</h5>
                                     </div>
@@ -151,9 +153,9 @@ function UserProfile() {
                                     <div className="mb-4 text-body">
                                         <p className="lead fw-normal mb-1">About</p>
                                         <div className="p-4 bg-body-tertiary">
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about1}>Profession [ {userData.profession} ]</p>
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about2}>City [ {userData.city} ]</p>
-                                            <p className="font-italic mb-1 about-edit" onClick={edit_about3}>Status [ {userData.status} ]</p>
+                                            <p className="font-italic mb-1 about-edit">Profession [ {userData.profession} ]</p>
+                                            <p className="font-italic mb-1 about-edit">City [ {userData.city} ]</p>
+                                            <p className="font-italic mb-1 about-edit">Status [ {userData.status} ]</p>
                                             <p>Email [ {userData.email} ]</p>
                                         </div>
                                     </div>
@@ -202,52 +204,44 @@ function UserProfile() {
                                     <p className="lead fw-normal mb-0">Posts</p>
 
                                     <div className="posts">
-
                                         {
-                                            userData.posts.map((i)=> <h1>{i.postTxt}</h1>)
-                                        }
-
-                                        {
-                                            posts.length <= 0 ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> :
-
-                                                posts.map((post, index) => (
-
-                                                    <div key={index} className="mt-5 card" style={{ width: "100%" }}>
-                                                        <span className="d-flex">
-                                                            <img key={index} alt="..." src={"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"} style={{
-                                                                width: "50px",
-                                                                height: "50px",
-                                                                borderRadius: "50%",
-                                                                border: "1px solid",
-                                                                margin: "10px 15px 0 10px"
-                                                            }} />
-                                                            <div className="d-flex flex-column" style={{ marginTop: '10px' }}>
-                                                                <h4>{name || userName}</h4>
-                                                                <pre>
-                                                                    {
-                                                                        date.getDate()
-                                                                        + "/" +
-                                                                        date.getMonth()
-                                                                        + "/" +
-                                                                        date.getFullYear()}
-                                                                    {"  "}
-                                                                    {
-                                                                        (post.hr <= 9 ? "0" + post.hr : post.hr)
-                                                                        + ':' +
-                                                                        (post.min <= 9 ? "0" + post.min : post.min)
-                                                                        + ':' +
-                                                                        (post.sec <= 9 ? "0" + post.sec : post.sec)
-                                                                    }                                                            </pre>
-                                                            </div>
-                                                        </span>
-                                                        <div className="card-body">
-                                                            <p className="card-text">{post.title}</p>
+                                            userData.posts == undefined ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> : posts1.map((post, index) => (
+                                                <div key={index} className="mt-5 card" style={{ width: "100%" }}>
+                                                    <span className="d-flex">
+                                                        <img key={index} alt="..." src={userData.profile_picture_URL} style={{
+                                                            width: "50px",
+                                                            height: "50px",
+                                                            borderRadius: "50%",
+                                                            border: "1px solid",
+                                                            margin: "10px 15px 0 10px"
+                                                        }} />
+                                                        <div className="d-flex flex-column" style={{ marginTop: '10px', width: "100%" }}>
+                                                            <h4>{userData.username}</h4>
+                                                            <pre style={{ overflow: "hidden" }}>
+                                                                {
+                                                                    post.date
+                                                                    + "/" +
+                                                                    post.month
+                                                                    + "/" +
+                                                                    post.year
+                                                                }
+                                                                {"  "}
+                                                                {
+                                                                    (post.hr <= 9 ? "0" + post.hr : post.hr)
+                                                                    + ':' +
+                                                                    (post.min <= 9 ? "0" + post.min : post.min)
+                                                                    + ':' +
+                                                                    (post.sec <= 9 ? "0" + post.sec : post.sec + "s")
+                                                                }                                                            </pre>
                                                         </div>
-                                                        <img src={post.postPicUrl} className="card-img-top" alt={`Post ${index}`} />
+                                                    </span>
+                                                    <div className="card-body">
+                                                        <p className="card-text">{post.postTitle}</p>
                                                     </div>
-                                                ))}
+                                                    <img src={post.postPicUrl} className="card-img-top" alt={`Post ${index}`} />
+                                                </div>
+                                            ))}
                                     </div>
-
                                 </div>
                             </div>
                         </div>
