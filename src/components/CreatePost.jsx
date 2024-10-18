@@ -5,6 +5,9 @@ import { app } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getStorage, uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
+import ShowLoader from "./ShowLoader";
+import Alert from "./Alert";
+
 
 const dataBase = getDatabase(app);
 const auth = getAuth(app);
@@ -14,6 +17,8 @@ let date = new Date();
 export default function CreatePost() {
     const [postTitle, setPostTitle] = useState("");
     const [postPic, setPostPic] = useState("");
+    const [loader, setLoader] = useState(false);
+    const [myAlert, setMyAlert] = useState(false);
 
     const [userData, setUserData] = useState("");
     const navigate = useNavigate();
@@ -35,39 +40,53 @@ export default function CreatePost() {
     }, [])
 
     async function putData() {
-        if (userData) {
-            let downloadPostURL;
-            if (postPic) {
-                const postImgRef = storageRef(storage, `upload/images/user/posts${Date.now()}-${postPic.name}`)
-                await uploadBytes(postImgRef, postPic)
-                downloadPostURL = await getDownloadURL(postImgRef);
-            };
-            if (postTitle) {
-                const postRef = ref(dataBase, 'users_info/' + userData.id + '/posts');
-                const post = {
-                    postTitle: postTitle,
-                    postPicUrl: downloadPostURL,
-                    date: date.getDate(),
-                    month: date.getMonth(),
-                    year: date.getFullYear(),
-                    hr: date.getHours(),
-                    min: date.getMinutes(),
-                    sec: date.getSeconds(),
+        setLoader(true);
+        if (postPic && postTitle) {
+            if (userData) {
+                let downloadPostURL;
+                if (postPic) {
+                    const postImgRef = storageRef(storage, `upload/images/user/posts${Date.now()}-${postPic.name}`)
+                    await uploadBytes(postImgRef, postPic)
+                    downloadPostURL = await getDownloadURL(postImgRef);
                 };
-                await push(postRef, post)
-                    .then(() => {
-                        console.log('Post added successfully!');
-                    })
-                    .catch((error) => {
-                        console.error('Error adding post: ', error);
-                    });
-            };
-            navigate("/home/user")
+                if (postTitle) {
+                    const postRef = ref(dataBase, 'users_info/' + userData.id + '/posts');
+                    const post = {
+                        postTitle: postTitle,
+                        postPicUrl: downloadPostURL,
+                        date: date.getDate(),
+                        month: date.getMonth(),
+                        year: date.getFullYear(),
+                        hr: date.getHours(),
+                        min: date.getMinutes(),
+                        sec: date.getSeconds(),
+                    };
+                    await push(postRef, post)
+                        .then(() => {
+                            console.log('Post added successfully!');
+
+                            setTimeout(() => {
+                                setMyAlert(true)
+                                setTimeout(() => {
+                                    navigate("/home/user")
+                                }, 1500)
+                            }, 0)
+                        })
+                        .catch((error) => {
+                            console.error('Error adding post: ', error);
+                        }).finally(setLoader(false));
+                };
+            }
+        } else {
+            setLoader(false);
+            alert("please fill inputs")
         }
     }
 
     return (
         <>
+            {loader && <ShowLoader />}
+            {myAlert && <Alert text="Post Created" />}
             <div className="parent">
                 <div className="login-page-con">
                     <div className="btn-sm-con">

@@ -123,7 +123,7 @@ function Posts() {
                                                         }:${post.min <= 9 ? "0" + post.min : post.min}:${post.sec <= 9 ? "0" + post.sec : post.sec
                                                         }`}
                                                 </pre>
-                                                <div style={{backgroundColor:"white",padding:"2px"}}>Comment Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis animi culpa error veritatis delectus aliquam dolores. Laborum minus itaque magni iusto beatae accusamus corporis accusantium dolore ratione, veniam, alias voluptates. Section for Post {post.id}</div>
+                                                <div style={{ backgroundColor: "white", padding: "2px" }}>Comment Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis animi culpa error veritatis delectus aliquam dolores. Laborum minus itaque magni iusto beatae accusamus corporis accusantium dolore ratione, veniam, alias voluptates. Section for Post {post.id}</div>
                                             </div>
                                         </div>
                                     </div>

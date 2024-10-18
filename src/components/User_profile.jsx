@@ -24,7 +24,7 @@ function UserProfile() {
                     async (snapshot) => {
                         let userData = await snapshot.val();
                         setUserData(userData);
-                        setPosts1(userData.posts ? Object.values(userData.posts) : []);
+                        setPosts1(userData.posts ? Object.values(userData.posts).reverse() : []);
                         // setP(userData);
                         setLoader(false);
                         console.log(posts1);
@@ -168,31 +168,35 @@ function UserProfile() {
                                     <div className="row g-2">
                                         <div className="col mb-2">
                                             <img
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                                                alt="image 1"
+                                                height="150px"
+                                                src={posts1[0]?.postPicUrl}
+                                                alt=""
                                                 className="w-100 rounded-3"
                                             />
                                         </div>
                                         <div className="col mb-2">
                                             <img
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
-                                                alt="image 2"
+                                                height="150px"
+                                                src={posts1[1]?.postPicUrl}
+                                                alt=""
                                                 className="w-100 rounded-3"
-                                            />
+                                                />
                                         </div>
                                     </div>
                                     <div className="row g-2">
                                         <div className="col">
                                             <img
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
-                                                alt="image 3"
+                                                height="150px"
+                                                src={posts1[2]?.postPicUrl}
+                                                alt=""
                                                 className="w-100 rounded-3"
                                             />
                                         </div>
                                         <div className="col">
                                             <img
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
-                                                alt="image 4"
+                                                height="150px"
+                                                src={posts1[3]?.postPicUrl}
+                                                alt=""
                                                 className="w-100 rounded-3"
                                             />
                                         </div>
@@ -239,9 +243,20 @@ function UserProfile() {
                                                         <p className="card-text">{post.postTitle}</p>
                                                     </div>
                                                     <img src={post.postPicUrl} className="card-img-top" alt={`Post ${index}`} />
+
+                                                    <div className="d-flex justify-content-around m-3">
+                                                        <div className={post.likes == false ? "like-btn like" : "like"}>
+                                                            Like { }
+                                                        </div>
+                                                        <div className={post.showComments ? "com-btn like" : "like"}>
+                                                            Comments
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             ))}
                                     </div>
+
                                 </div>
                             </div>
                         </div>

@@ -9,13 +9,14 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase";
 import ShowLoader from "../components/ShowLoader";
 import { getDatabase, set, ref, onValue, update } from "firebase/database";
+import Alert from "../components/Alert";
 
 const auth = getAuth(app)
 const dataBase = getDatabase(app)
 
 function Signin_form() {
 
-    const { setIsSignedIn, setSignedInUser, loader, setLoader } = useContext(UserContext);
+    const { setIsSignedIn, setSignedInUser } = useContext(UserContext);
 
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
@@ -23,6 +24,8 @@ function Signin_form() {
     const [fillInpPassword, setFillInpPassword] = useState(false);
     const [hidePassword, setHidePassword] = useState(true);
     const navigate = useNavigate();
+    const [myAlert, setAlert] = useState(false)
+    const [loader, setLoader] = useState(false)
 
     // regUsers.find(items => userEmail === items.useremail && userPassword === items.userpassword);
 
@@ -37,9 +40,11 @@ function Signin_form() {
 
 
         if (userEmail && userPassword) {
-            // setLoader(true);
+            setLoader(true);
+
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
+                setAlert(true)
                 const userInfo = userCredential.user;
 
                 await update(ref(dataBase, 'users_info/' + userInfo.uid),
@@ -57,9 +62,8 @@ function Signin_form() {
                 setFillInpsEmail(false);
                 setFillInpPassword(false);
 
-                window.alert("Signin Successful");
+                // setLoader(false)
                 navigate("/home/user");
-
             } catch (error) {
                 if (error.code === 'auth/wrong-password') {
                     alert("Invalid Password");
@@ -119,6 +123,8 @@ function Signin_form() {
     return (
         <>
             {loader && <ShowLoader />}
+            {myAlert && <Alert text="Signin Successful"
+                icon={<i className="fa-regular fa-circle-check" style={{ color: "wheat" }}></i>} />}
 
             <div className="parent">
                 <div className="login-page-con">
