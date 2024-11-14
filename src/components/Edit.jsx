@@ -38,21 +38,23 @@ function Edit() {
     }, [])
 
     async function putData() {
+        let downloadProfileURL;
+        //  = profileURL;
+        if (profilePic) {
+            const proImgRef = storageRef(storage, `upload/images/user${Date.now()}-${profilePic.name}`)
+            await uploadBytes(proImgRef, profilePic)
+            downloadProfileURL = await getDownloadURL(proImgRef);
+        };
         if (userData) {
-            let downloadProfileURL = profileURL;
-            if (profilePic) {
-                const proImgRef = storageRef(storage, `upload/images/user${Date.now()}-${profilePic.name}`)
-                await uploadBytes(proImgRef, profilePic)
-                downloadProfileURL = await getDownloadURL(proImgRef);
-            };
             if (userName || profession || city || status || profileURL) {
                 await update(ref(dataBase, 'users_info/' + userData.id),
                     {
-                        username: userName || userData.username,
-                        profession: profession || userData.profession,
-                        city: city || userData.city,
-                        status: status || userData.status,
-                        profile_picture_URL: downloadProfileURL || userData.profile_picture_URL,
+                        username: userName != "" ? userName : userData?.username || "",
+                        profession: profession != "" ? profession : userData?.profession || "",
+                        city: city != "" ? city : userData?.city || "",
+                        status: status != "" ? status : userData?.status || "",
+                        profile_picture_URL:  downloadProfileURL || 
+                         userData?.profile_picture_URL || "",
                     })
             };
             navigate("/home/user")

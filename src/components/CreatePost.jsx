@@ -86,7 +86,7 @@ export default function CreatePost() {
     return (
         <>
             {loader && <ShowLoader />}
-            {myAlert && <Alert text="Post Created" />}
+            {myAlert && <Alert text="Post Created" icon={<i className="fa-regular fa-circle-check" style={{ color: "wheat" }}></i>} />}
             <div className="parent">
                 <div className="login-page-con">
                     <div className="btn-sm-con">

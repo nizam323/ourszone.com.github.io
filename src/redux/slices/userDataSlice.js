@@ -8,10 +8,10 @@ export const isAuthCheck = createAsyncThunk('isAuthCheck', () => {
     return new Promise((resolve, reject) => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                let userData= {
-                    uid:user.uid
-                }
-                resolve(userData);
+                // let userData= {
+                    // uid:user.uid
+                // }
+                resolve({uid:user.uid});
             } else {
                 reject("rejected")
             }
@@ -29,11 +29,13 @@ export const isAuth = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(isAuthCheck.fulfilled, (state, action) => {
+            console.log('action',action);
+            
             state.userIsAuth = action.payload
             console.log("success")
         });
         builder.addCase(isAuthCheck.pending, () => console.log("pending..."));
-        builder.addCase(isAuthCheck.rejected, () => console.log("rejected", action.error));
+        builder.addCase(isAuthCheck.rejected, () => console.log("rejected"));
     },
 })
 
