@@ -72,6 +72,10 @@ function App() {
       path: "/create-post",
       element: <CreatePost />,
     },
+    {
+      path: "/ours_zone/user_public_profile/:id",
+      element: <PublicProfile />,
+    },
   ]);
 
   return (

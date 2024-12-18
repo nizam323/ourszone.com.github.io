@@ -263,12 +263,11 @@
 }
 
 .searching {
-    background-color: #c0c4c4;
-    height: 60vmin;
+    background-color: #868686;
+    padding: 8px 15px 30px;
     position: absolute;
-    top: 60px;
-    width: 98%;
-    left: 6px;
+    top: 50px;
+    width: 100%;
     z-index: 5;
 }
 
@@ -277,10 +276,18 @@
     text-align: end;
     margin: 10px 15px 0 0;
     font-size: 23px;
+    color: white;
+    transition: color;
+    transition-duration: .7s;
+}
+
+.close-searching:hover {
+    color: black;
 }
 
 .search-pro-card-con {
-    background-color: #c4b0af;
+    border-radius: 20px;
+    background-color: #d8d5d5;
     height: 100px;
     display: flex;
     align-items: center;
@@ -292,7 +299,7 @@
 }
 
 .search-pro-card-con:hover {
-    background-color: #c4b0af8e;
+    background-color: #c3c3c3cf;
 }
 
 .search-pro-card-con img {
@@ -308,10 +315,35 @@
     font-weight: 600;
 }
 
+.searching a {
+    color: black;
+    text-decoration: none;
+}
+
+.cus-st {
+    width: 55%;
+}
+
+.cus-st-2 {
+    position: absolute;
+    right: 25px;
+    top: 35px;
+    cursor: pointer;
+    color: #e7e2e2;
+}
+
+.cus-st-2:hover {
+    color: #e7e2e2b2;
+}
+
 @media only screen and (min-width:0px) and (max-width:992px) {
     .navbar-nav .nav-link {
         border-radius: 5px;
         padding: 10px 10px;
         margin: 10px 0 0;
+    }
+
+    .searching {
+        top: 265px;
     }
 }

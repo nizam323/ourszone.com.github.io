@@ -2,8 +2,13 @@
     .login-page-con {
         width: 90%;
     }
-    .parent{
+
+    .parent {
         height: auto;
+    }
+
+    .cus-st {
+        width: 98%;
     }
 }
 
