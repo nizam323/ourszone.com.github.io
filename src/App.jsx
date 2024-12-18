@@ -11,11 +11,13 @@ import Posts from './components/Posts.jsx';
 import ProutectedRoutes from './protectedRoutes/ProutectedRoutes.jsx';
 import Edit from "./components/Edit.jsx";
 import CreatePost from './components/CreatePost.jsx';
+import PublicProfile from './components/Public-profile.jsx';
 
 export const UserContext = createContext();
 
 function App() {
   // const [loginpageDisplay, setLoginpageDisplay] = useState(true);
+  const [searchResult, setSearchResult] = useState([]);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [signedInUser, setSignedInUser] = useState("");
   const [loader, setLoader] = useState(false);
@@ -74,6 +76,7 @@ function App() {
 
   return (
     <UserContext.Provider value={{
+      searchResult, setSearchResult,
       isSignedIn, setIsSignedIn, signedInUser, setSignedInUser, loader, setLoader
     }}>
       <RouterProvider router={router} />

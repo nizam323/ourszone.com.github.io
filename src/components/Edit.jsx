@@ -39,24 +39,21 @@ function Edit() {
 
     async function putData() {
         let downloadProfileURL;
-        //  = profileURL;
         if (profilePic) {
             const proImgRef = storageRef(storage, `upload/images/user${Date.now()}-${profilePic.name}`)
             await uploadBytes(proImgRef, profilePic)
             downloadProfileURL = await getDownloadURL(proImgRef);
         };
         if (userData) {
-            if (userName || profession || city || status || profileURL) {
-                await update(ref(dataBase, 'users_info/' + userData.id),
-                    {
-                        username: userName != "" ? userName : userData?.username || "",
-                        profession: profession != "" ? profession : userData?.profession || "",
-                        city: city != "" ? city : userData?.city || "",
-                        status: status != "" ? status : userData?.status || "",
-                        profile_picture_URL:  downloadProfileURL || 
-                         userData?.profile_picture_URL || "",
-                    })
-            };
+            await update(ref(dataBase, 'users_info/' + userData.id),
+                {
+                    username: userName != "" ? userName : userData?.username || "",
+                    profession: profession != "" ? profession : userData?.profession || "",
+                    city: city != "" ? city : userData?.city || "",
+                    status: status != "" ? status : userData?.status || "",
+                    profile_picture_URL: downloadProfileURL ||
+                        userData?.profile_picture_URL || "",
+                });
             navigate("/home/user")
         }
     }
