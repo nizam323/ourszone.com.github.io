@@ -4,6 +4,8 @@ import { useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { app } from "../firebase";
+import ShowLoader from "./ShowLoader";
+import ErrorPage from "../error-page";
 
 const auth = getAuth(app);
 const database = getDatabase(app);
@@ -11,36 +13,42 @@ const database = getDatabase(app);
 export default function PublicProfile({ }) {
     const { id } = useParams();
     const [userData, setUserData] = useState(null)
+    const [loader, setLoader] = useState(false)
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 onValue(ref(database, `users_info/${id}`),
                     async (snapshot) => {
+                        setLoader(true)
                         let userData = await snapshot.val();
-                        setUserData(
-                            // Object.values(
-                            userData)
-                        // );
+                        setUserData(userData || [])
+                        setLoader(false)
                     })
             } else {
-                setUserData(null)
+                setUserData(false)
+                setLoader(false)
             }
         })
     }, [])
-    console.log("userData", userData);
-    // const userData = userData.filter((i) => i.id == id)
+
+    if (loader) return <ShowLoader />;
+
+    if (userData == false) return <ErrorPage />
 
     return (
         <>
             <section className="h-100 gradient-custom-2">
-                {/* {loader && <ShowLoader />} */}
                 <div className="container py-3 h-100 cus-st" style={{ backgroundColor: '#000000' }}>
                     <div className="row d-flex justify-content-center">
                         <div className="col col-lg-9 col-xl-8" style={{ width: '100%', }}>
                             <div className="card">
                                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
-                                    <span className="cus-st-2" onClick={() => window.history.back(1)}><i>back</i></span>
+                                    <abbr title="Go Backward">
+                                        <span className="cus-st-2" onClick={() => window.history.back(1)}><i
+                                            style={{ transform: `rotate(180deg)` }} class="fa-solid 
+                                            fa-arrow-right"></i></span>
+                                    </abbr>
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
                                         <img
                                             src={userData && userData.profile_picture_URL ? userData.profile_picture_URL : "../../images/istockphoto-1300845620-612x612.jpg"}
@@ -51,7 +59,7 @@ export default function PublicProfile({ }) {
                                     </div>
                                     <div className="ms-3" style={{ marginTop: '130px' }}>
                                         <h5 className="about-edit">{
-                                            userData.username
+                                            userData?.username
                                         }</h5>
                                     </div>
                                 </div>
@@ -76,16 +84,16 @@ export default function PublicProfile({ }) {
                                         <p className="lead fw-normal mb-1">About</p>
                                         <div className="p-4 bg-body-tertiary">
                                             <p className="font-italic mb-1 about-edit">Profession [
-                                                {userData.profession}
+                                                {userData?.profession}
                                                 ]</p>
                                             <p className="font-italic mb-1 about-edit">City [
-                                                {userData.city}
+                                                {userData?.city}
                                                 ]</p>
                                             <p className="font-italic mb-1 about-edit">Status [
-                                                {userData.status}
+                                                {userData?.status}
                                                 ]</p>
                                             <p>Email [
-                                                {userData.email}
+                                                {userData?.email}
                                                 ]</p>
                                         </div>
                                     </div>
