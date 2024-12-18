@@ -13,7 +13,9 @@ const database = getDatabase(app);
 export default function PublicProfile({ }) {
     const { id } = useParams();
     const [userData, setUserData] = useState(null)
+    const [userPosts, setUserPosts] = useState([])
     const [loader, setLoader] = useState(false)
+    const [errorPage, setErrorPage] = useState(false)
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -22,19 +24,27 @@ export default function PublicProfile({ }) {
                     async (snapshot) => {
                         setLoader(true)
                         let userData = await snapshot.val();
-                        setUserData(userData || [])
+                        setUserData(userData)
+                        setUserPosts(userData && Object.values(userData.posts) || [])
                         setLoader(false)
+                        if (!userData) {
+                            setUserData(null)
+                            setLoader(false)
+                            setErrorPage(true)
+                        }
                     })
             } else {
-                setUserData(false)
+                setUserData(null)
                 setLoader(false)
             }
         })
     }, [])
+    console.log(userPosts);
+    console.log(errorPage);
 
     if (loader) return <ShowLoader />;
 
-    if (userData == false) return <ErrorPage />
+    if (errorPage == true) return <ErrorPage />;
 
     return (
         <>
@@ -46,7 +56,7 @@ export default function PublicProfile({ }) {
                                 <div className="rounded-top text-white d-flex flex-row" style={{ backgroundColor: '#000', height: '200px' }}>
                                     <abbr title="Go Backward">
                                         <span className="cus-st-2" onClick={() => window.history.back(1)}><i
-                                            style={{ transform: `rotate(180deg)` }} class="fa-solid 
+                                            style={{ transform: `rotate(180deg)` }} className="fa-solid 
                                             fa-arrow-right"></i></span>
                                     </abbr>
                                     <div className="ms-4 mt-5 d-flex flex-column" style={{ width: '150px' }}>
@@ -107,7 +117,7 @@ export default function PublicProfile({ }) {
                                         <div className="col mb-2">
                                             <img
                                                 height="150px"
-                                                // src={posts1[0]?.postPicUrl}
+                                                src={userPosts[0]?.postPicUrl}
                                                 alt=""
                                                 className="w-100 rounded-3"
                                             />
@@ -115,7 +125,7 @@ export default function PublicProfile({ }) {
                                         <div className="col mb-2">
                                             <img
                                                 height="150px"
-                                                // src={posts1[1]?.postPicUrl}
+                                                src={userPosts[1]?.postPicUrl}
                                                 alt=""
                                                 className="w-100 rounded-3"
                                             />
@@ -125,7 +135,7 @@ export default function PublicProfile({ }) {
                                         <div className="col">
                                             <img
                                                 height="150px"
-                                                // src={posts1[2]?.postPicUrl}
+                                                src={userPosts[2]?.postPicUrl}
                                                 alt=""
                                                 className="w-100 rounded-3"
                                             />
@@ -133,7 +143,7 @@ export default function PublicProfile({ }) {
                                         <div className="col">
                                             <img
                                                 height="150px"
-                                                // src={posts1[3]?.postPicUrl}
+                                                src={userPosts[3]?.postPicUrl}
                                                 alt=""
                                                 className="w-100 rounded-3"
                                             />
@@ -143,56 +153,56 @@ export default function PublicProfile({ }) {
 
                                     <div className="mb-4 mt-5"></div>
 
-                                    <p className="lead fw-normal mb-0">Posts</p>
+                                    <center><p className="lead fw-normal mb-0">Posts</p></center>
 
                                     <div className="posts">
-                                        {/* {
-                                        userData.posts == undefined ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> : posts1.map((post, index) => (
-                                            <div key={index} className="mt-5 card" style={{ width: "100%" }}>
-                                                <span className="d-flex">
-                                                    <img key={index} alt="..." src={userData.profile_picture_URL} style={{
-                                                        width: "50px",
-                                                        height: "50px",
-                                                        borderRadius: "50%",
-                                                        border: "1px solid",
-                                                        margin: "10px 15px 0 10px"
-                                                    }} />
-                                                    <div className="d-flex flex-column" style={{ marginTop: '10px', width: "100%" }}>
-                                                        <h4>{userData.username}</h4>
-                                                        <pre style={{ overflow: "hidden" }}>
-                                                            {
-                                                                post.date
-                                                                + "/" +
-                                                                post.month
-                                                                + "/" +
-                                                                post.year
-                                                            }
-                                                            {"  "}
-                                                            {
-                                                                (post.hr <= 9 ? "0" + post.hr : post.hr)
-                                                                + ':' +
-                                                                (post.min <= 9 ? "0" + post.min : post.min)
-                                                                + ':' +
-                                                                (post.sec <= 9 ? "0" + post.sec : post.sec + "s")
-                                                            }                                                            </pre>
+                                        {
+                                            userPosts == undefined ? <p style={{ color: "gray" }} className="text-center lead fw-normal mb-0">Your Posts Appear Here </p> : userPosts.map((post, index) => (
+                                                <div key={index} className="mt-5 card" style={{ width: "100%" }}>
+                                                    <span className="d-flex">
+                                                        <img key={index} alt="..." src={userData.profile_picture_URL} style={{
+                                                            width: "50px",
+                                                            height: "50px",
+                                                            borderRadius: "50%",
+                                                            border: "1px solid",
+                                                            margin: "10px 15px 0 10px"
+                                                        }} />
+                                                        <div className="d-flex flex-column" style={{ marginTop: '10px', width: "100%" }}>
+                                                            <h4>{userData.username}</h4>
+                                                            <pre style={{ overflow: "hidden" }}>
+                                                                {
+                                                                    post.date
+                                                                    + "/" +
+                                                                    post.month
+                                                                    + "/" +
+                                                                    post.year
+                                                                }
+                                                                {"  "}
+                                                                {
+                                                                    (post.hr <= 9 ? "0" + post.hr : post.hr)
+                                                                    + ':' +
+                                                                    (post.min <= 9 ? "0" + post.min : post.min)
+                                                                    + ':' +
+                                                                    (post.sec <= 9 ? "0" + post.sec : post.sec + "s")
+                                                                }                                                            </pre>
+                                                        </div>
+                                                    </span>
+                                                    <div className="card-body">
+                                                        <p className="card-text">{post.postTitle}</p>
                                                     </div>
-                                                </span>
-                                                <div className="card-body">
-                                                    <p className="card-text">{post.postTitle}</p>
-                                                </div>
-                                                <img src={post.postPicUrl} className="card-img-top" alt={`Post ${index}`} />
+                                                    <img src={post.postPicUrl} className="card-img-top" alt={`Post ${index}`} />
 
-                                                <div className="d-flex justify-content-around m-3">
-                                                <div className={post.likes == false ? "like-btn like" : "like"}>
-                                                        Like { }
+                                                    <div className="d-flex justify-content-around m-3">
+                                                        <div className={post.likes == false ? "like-btn like" : "like"}>
+                                                            Like { }
+                                                        </div>
+                                                        <div className={"like"}>
+                                                            Comments
+                                                        </div>
                                                     </div>
-                                                    <div className={"like"}>
-                                                        Comments
-                                                    </div>
-                                                </div>
 
-                                            </div>
-                                        ))} */}
+                                                </div>
+                                            ))}
                                     </div>
 
                                 </div>
