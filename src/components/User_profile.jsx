@@ -27,8 +27,8 @@ function UserProfile() {
                         setPosts1(userData.posts ? Object.values(userData.posts).reverse() : []);
                         // setP(userData);
                         setLoader(false);
-                        console.log(posts1);
-                        console.log(userData.posts);
+                        // console.log(posts1);
+                        // console.log(userData.posts);
 
                     });
             } else {

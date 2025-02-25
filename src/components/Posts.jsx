@@ -34,7 +34,7 @@ function Posts() {
         setDataUsersPosts(allPosts);
     }, [data]);
 
-    console.log("dataUsersPosts", dataUsersPosts);
+    // console.log("dataUsersPosts", dataUsersPosts);
 
     let date = new Date();
     const initialPosts = [

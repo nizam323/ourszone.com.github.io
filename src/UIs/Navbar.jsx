@@ -30,7 +30,7 @@ function Navbar() {
             }
         })
     }, [])
-    console.log("userData", userData);
+    // console.log("userData", userData);
 
     function handleSearch(e) {
         e.preventDefault();
@@ -47,8 +47,8 @@ function Navbar() {
         setSearchResult(result)
         setQueryResult(result)
 
-        console.log("result", result);
-        console.log("query", query);
+        // console.log("result", result);
+        // console.log("query", query);
     }
 
     return (

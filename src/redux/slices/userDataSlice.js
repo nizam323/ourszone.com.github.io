@@ -29,7 +29,7 @@ export const isAuth = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(isAuthCheck.fulfilled, (state, action) => {
-            console.log('action',action);
+            // console.log('action',action);
             
             state.userIsAuth = action.payload
             console.log("success")

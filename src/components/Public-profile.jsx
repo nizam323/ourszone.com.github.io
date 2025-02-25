@@ -39,8 +39,8 @@ export default function PublicProfile({ }) {
             }
         })
     }, [])
-    console.log(userPosts);
-    console.log(errorPage);
+    // console.log(userPosts);
+    // console.log(errorPage);
 
     if (loader) return <ShowLoader />;
 

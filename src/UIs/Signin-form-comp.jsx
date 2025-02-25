@@ -52,7 +52,7 @@ function Signin_form() {
                         id: userInfo.uid,
                         email: userInfo.email,
                     })
-                console.log(userInfo);
+                // console.log(userInfo);
 
                 setIsSignedIn(true);
                 setSignedInUser(userInfo);

@@ -75,9 +75,9 @@ function App() {
     {
       path: "/ours_zone/user_public_profile/:id",
       element:
-        // <ProutectedRoutes>
+        <ProutectedRoutes>
           <PublicProfile />
-        // </ProutectedRoutes>
+        </ProutectedRoutes>
       ,
     },
   ]);
