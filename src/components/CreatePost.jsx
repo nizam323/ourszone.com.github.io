@@ -38,6 +38,7 @@ export default function CreatePost() {
 
         return () => check();
     }, [])
+    // console.log("userData",userData);
 
     async function putData() {
         setLoader(true);
@@ -55,11 +56,12 @@ export default function CreatePost() {
                         postTitle: postTitle,
                         postPicUrl: downloadPostURL,
                         date: date.getDate(),
-                        month: date.getMonth(),
+                        month: date.getMonth()+1,
                         year: date.getFullYear(),
                         hr: date.getHours(),
                         min: date.getMinutes(),
                         sec: date.getSeconds(),
+                        userId: userData.id,
                     };
                     await push(postRef, post)
                         .then(() => {

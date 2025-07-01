@@ -35,6 +35,7 @@ function Posts() {
     }, [data]);
 
     // console.log("dataUsersPosts", dataUsersPosts);
+    // console.log("data", data);
 
     let date = new Date();
     const initialPosts = [
@@ -158,57 +159,69 @@ function Posts() {
                     ))
                 )
                 }
-            
 
 
-            <div>
-                {dataUsersPosts.map((post, index) => (
-                    <div
-                        key={index}
-                        className="card"
-                        style={{
-                            width: "96%",
-                            margin: "15px auto 0",
-                            border: "1px solid white",
-                            borderRadius: ".25rem",
-                        }}
-                    >
-                        <span className="d-flex">
-                            <img
-                                alt="Profile"
-                                src={post.url || ""}
-                                style={{
-                                    width: "50px",
-                                    height: "50px",
-                                    borderRadius: "50%",
-                                    border: "1px solid",
-                                    margin: "10px 15px 0 10px",
-                                }}
-                            />
-                            <div className="d-flex flex-column" style={{ marginTop: "10px" }}>
-                                <h4>{post.profileName || "Unknown User"}</h4>
-                                <pre>{`${post.date}/${post.month}/${post.hr} | ${post.hr}hr ${post.min}min ${post.sec}sec`}</pre>
+
+                <div>
+                    {dataUsersPosts.map((post, index) => (
+                        <div
+                            key={index}
+                            className="card"
+                            style={{
+                                width: "96%",
+                                margin: "15px auto 0",
+                                border: "1px solid white",
+                                borderRadius: ".25rem",
+                            }}
+                        >
+                            <span className="d-flex">
+                                {(() => {
+                                    const user = data.find(u => u.id === post.userId);
+                                    return (
+                                        <img
+                                            alt="Profile"
+                                            src={user?.profile_picture_URL || ""}
+                                            style={{
+                                                width: "50px",
+                                                height: "50px",
+                                                borderRadius: "50%",
+                                                border: "1px solid",
+                                                margin: "10px 15px 0 10px",
+                                            }}
+                                        />
+                                    );
+                                })()}
+                                <div className="d-flex flex-column" style={{ marginTop: "10px" }}>
+                                    <h4>
+                                        {/* {post.profileName || "Unknown User"} */}
+                                        {(() => {
+                                            const user = data.find(u => u.id === post.userId);
+                                            console.log("user", user);
+                                            return user ? user.username : "Unknown User";
+                                        })()}
+                                    </h4>
+                                    <pre>{`${post.date}/${post.month}/${post.year} | ${post.hr}hr ${post.min}min ${post.sec}sec`}</pre>
+                                </div>
+                            </span>
+                            <div className="card-body">
+                                <p className="card-text">{post.postTitle || "No content available"}</p>
                             </div>
-                        </span>
-                        <div className="card-body">
-                            <p className="card-text">{post.postTitle || "No content available"}</p>
+                            {<img src={post.postPicUrl} className="card-img-top" alt={`Post`} />}
+                            <div className="d-flex justify-content-around m-3">
+                                <div
+                                    className={post.likes ? "like-btn like" : "like"}
+                                >
+                                    Like
+                                </div>
+                                <div
+                                    className={post.showComments ? "com-btn like" : "like"}
+                                >
+                                    Comments
+                                </div>
+                            </div>
                         </div>
-                        {<img src={post.postPicUrl} className="card-img-top" alt={`Post`} />}
-                        <div className="d-flex justify-content-around m-3">
-                            <div
-                                className={post.likes ? "like-btn like" : "like"}
-                            >
-                                Like
-                            </div>
-                            <div
-                                className={post.showComments ? "com-btn like" : "like"}
-                            >
-                                Comments
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div >
+                    ))}
+                </div >
             </div>
         </>
     );
