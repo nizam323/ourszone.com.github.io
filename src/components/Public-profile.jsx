@@ -25,7 +25,7 @@ export default function PublicProfile({ }) {
                         setLoader(true)
                         let userData = await snapshot.val();
                         setUserData(userData)
-                        setUserPosts(userData && Object.values(userData.posts) || [])
+                        setUserPosts(userData.posts ? Object.values(userData.posts) : [])
                         setLoader(false)
                         if (!userData) {
                             setUserData(null)
