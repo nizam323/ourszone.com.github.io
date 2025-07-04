@@ -10,6 +10,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase";
 import ShowLoader from "../components/ShowLoader";
 import { UserContext } from "../App";
+import Alert from "../components/Alert";
 
 const dataBase = getDatabase(app);
 const auth = getAuth(app);
@@ -23,6 +24,7 @@ function Signup_form() {
     const [userPassword, setUserPassword] = useState("");
     const [fillInpEmail, setFillInpsEmail] = useState(false);
     const [fillInpPassword, setFillInpPassword] = useState(false);
+    const [myAlert, setAlert] = useState(false)
 
     // const check = regUsers.find(items => userEmail === items.useremail);
 
@@ -49,11 +51,11 @@ function Signup_form() {
 
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+                setAlert(true)
                 setLoader(false)
 
                 const userInfo = userCredential.user;
 
-                window.alert("signup sucessfull");
                 setUserPassword("");
                 setUserEmail("");
                 setFillInpsEmail(false);
@@ -74,9 +76,18 @@ function Signup_form() {
         }
     }
 
+    if (myAlert == true) {
+        setTimeout(() => {
+            setAlert(false);
+        }, 1500);
+    }
+
     return (
         <>
             {loader && <ShowLoader />}
+            {myAlert && <Alert text="Signup Successful"
+                icon={<i className="fa-regular fa-circle-check" style={{ color: "wheat" }}></i>} />}
+
 
             <div className="parent">
                 <div className="login-page-con">
