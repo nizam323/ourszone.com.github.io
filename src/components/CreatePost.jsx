@@ -56,12 +56,14 @@ export default function CreatePost() {
                         postTitle: postTitle,
                         postPicUrl: downloadPostURL,
                         date: date.getDate(),
-                        month: date.getMonth()+1,
+                        month: date.getMonth() + 1,
                         year: date.getFullYear(),
                         hr: date.getHours(),
                         min: date.getMinutes(),
                         sec: date.getSeconds(),
                         userId: userData.id,
+                        likes: 0,
+                        likesByUsersIds:[],
                     };
                     await push(postRef, post)
                         .then(() => {

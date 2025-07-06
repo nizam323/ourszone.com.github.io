@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "../firebase";
 import { getDatabase, onValue, ref } from "firebase/database";
+import { update, ref as updateRef } from "firebase/database";
 
 const auth = getAuth(app);
 const dataBase = getDatabase(app);
@@ -10,10 +11,41 @@ function Posts() {
 
     const [data, setData] = useState([]);
     const [dataUsersPosts, setDataUsersPosts] = useState([]);
+    const [currentUserUid, setCurrentUserUid] = useState("");
+    const [shuffledPosts, setShuffledPosts] = useState([]);
+
+    // useEffect(() => {
+    //     //random post logic
+    //     const results = [];
+
+    //     function random() {
+    //         return Math.floor(Math.random() * dataUsersPosts.length);
+    //     }
+
+    //     for (let i = 0; i < dataUsersPosts.length; i++) {
+    //         let rand = random();
+    //         results.push(rand);
+    //     }
+
+    //     let seen = new Set();
+
+    //     for (let i = 0; i < results.length; i++) {
+    //         while (seen.has(results[i])) {
+    //             results[i] = random();
+    //         }
+    //         seen.add(results[i]);
+    //     }
+
+    //     const reordered = results.map(index => dataUsersPosts[index]);
+
+    //     setShuffledPosts(reordered);
+
+    // }, [dataUsersPosts]);
 
     useEffect(() => {
         let fn = onAuthStateChanged(auth, (user) => {
             if (user) {
+                setCurrentUserUid(user.uid);
                 onValue(ref(dataBase, "users_info/"),
                     async (snapshot) => {
                         let userData = await snapshot.val();
@@ -27,10 +59,16 @@ function Posts() {
 
     useEffect(() => {
         const allPosts = data
-            ? data.flatMap((items) =>
-                items.posts ? Object.values(items.posts) : []
+            ? data.flatMap((user) =>
+                user.posts
+                    ? Object.entries(user.posts).map(([postId, post]) => ({
+                        ...post,
+                        postId
+                    }))
+                    : []
             )
             : [];
+
         setDataUsersPosts(allPosts);
     }, [data]);
 
@@ -82,32 +120,27 @@ function Posts() {
         );
     }
 
-    //random post logic
-    const results = [];
+    // like functionality
+    function handle_likes(postOwnerUserId, currentUserUid, postsId, postsLikes, likesByUsersIds) {
+        const postRef = updateRef(dataBase, `users_info/${postOwnerUserId}/posts/${postsId}`);
+        const likedBy = likesByUsersIds || [];
+        let updatedLikes = postsLikes;
+        let updatedLikedBy = [...likedBy];
 
-    function random() {
-        return Math.floor(Math.random() * dataUsersPosts.length);
-    }
-
-    for (let i = 0; i < dataUsersPosts.length; i++) {
-        let rand = random();
-        results.push(rand);
-    }
-
-    let seen = new Set();
-
-    for (let i = 0; i < results.length; i++) {
-        while (seen.has(results[i])) {
-            results[i] = random();
+        if (!likedBy.includes(currentUserUid)) {
+            updatedLikes += 1;
+            updatedLikedBy.push(currentUserUid);
+        } else {
+            updatedLikes -= 1;
+            updatedLikedBy = likedBy.filter((uid) => uid != currentUserUid)
         }
-        seen.add(results[i]);
+
+        update(postRef, {
+            likes: updatedLikes,
+            likesByUsersIds: updatedLikedBy
+        });
+
     }
-
-    let reordered = [];
-
-    dataUsersPosts.forEach((item, index) => {
-        reordered[results[index]] = item;
-    });
 
     return (
         <>
@@ -119,63 +152,66 @@ function Posts() {
                 ) : ("")}
 
                 <div>
-                    {reordered.map((post, index) => (
-                        <div
-                            key={index}
-                            className="card"
-                            style={{
-                                width: "96%",
-                                margin: "15px auto 0",
-                                border: "1px solid white",
-                                borderRadius: ".25rem",
-                            }}
-                        >
-                            <span className="d-flex">
-                                {(() => {
-                                    const user = data.find(u => u.id === post.userId);
-                                    return (
-                                        <img
-                                            alt="Profile"
-                                            src={user?.profile_picture_URL || ""}
-                                            style={{
-                                                width: "50px",
-                                                height: "50px",
-                                                borderRadius: "50%",
-                                                border: "1px solid",
-                                                margin: "10px 15px 0 10px",
-                                            }}
-                                        />
-                                    );
-                                })()}
-                                <div className="d-flex flex-column" style={{ marginTop: "10px" }}>
-                                    <h4>
-                                        {/* {post.profileName || "Unknown User"} */}
-                                        {(() => {
-                                            const user = data.find(u => u.id === post.userId);
-                                            return user ? user.username : "Unknown User";
-                                        })()}
-                                    </h4>
-                                    <pre>{`${post.date}/${post.month}/${post.year} | ${post.hr}hr ${post.min}min ${post.sec}sec`}</pre>
+                    {
+                        //shuffledPosts
+                        dataUsersPosts.map((post, index) => (
+                            <div
+                                key={index}
+                                className="card"
+                                style={{
+                                    width: "96%",
+                                    margin: "15px auto 0",
+                                    border: "1px solid white",
+                                    borderRadius: ".25rem",
+                                }}
+                            >
+                                <span className="d-flex">
+                                    {(() => {
+                                        const user = data.find(u => u.id === post.userId);
+                                        return (
+                                            <img
+                                                alt="Profile"
+                                                src={user?.profile_picture_URL || ""}
+                                                style={{
+                                                    width: "50px",
+                                                    height: "50px",
+                                                    borderRadius: "50%",
+                                                    border: "1px solid",
+                                                    margin: "10px 15px 0 10px",
+                                                }}
+                                            />
+                                        );
+                                    })()}
+                                    <div className="d-flex flex-column" style={{ marginTop: "10px" }}>
+                                        <h4>
+                                            {/* {post.profileName || "Unknown User"} */}
+                                            {(() => {
+                                                const user = data.find(u => u.id === post.userId);
+                                                return user ? user.username : "Unknown User";
+                                            })()}
+                                        </h4>
+                                        <pre>{`${post.date}/${post.month}/${post.year} | ${post.hr}hr ${post.min}min ${post.sec}sec`}</pre>
+                                    </div>
+                                </span>
+                                <div className="card-body">
+                                    <p className="card-text">{post.postTitle || "No content available"}</p>
                                 </div>
-                            </span>
-                            <div className="card-body">
-                                <p className="card-text">{post.postTitle || "No content available"}</p>
+                                {<img src={post.postPicUrl} className="card-img-top" alt={`Post`} />}
+                                <div className="d-flex justify-content-around m-3">
+                                    <div
+                                        className={post.likes > 0 ? "like-btn like" : "like"}
+                                        onClick={() => handle_likes(post.userId, currentUserUid, post.postId, post.likes, post.likesByUsersIds)}
+                                    >
+                                        Like {post.likes > 0 && post.likes}
+                                    </div>
+                                    <div
+                                        className={post.showComments ? "com-btn like" : "like"}
+                                    >
+                                        Comments
+                                    </div>
+                                </div>
                             </div>
-                            {<img src={post.postPicUrl} className="card-img-top" alt={`Post`} />}
-                            <div className="d-flex justify-content-around m-3">
-                                <div
-                                    className={post.likes ? "like-btn like" : "like"}
-                                >
-                                    Like
-                                </div>
-                                <div
-                                    className={post.showComments ? "com-btn like" : "like"}
-                                >
-                                    Comments
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
                 </div >
             </div>
         </>
